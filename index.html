@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Forge Studio — Форум</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, system-ui, sans-serif;
+        }
+
+        body {
+            background-color: #0f0f0f;
+            display: flex;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .forum-container {
+            max-width: 1100px;
+            width: 100%;
+            background-color: #1a1a1a;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 0 1px #2a2a2a inset;
+            overflow: hidden;
+            border: 1px solid #3d3d3d;
+        }
+
+        .header {
+            background: linear-gradient(145deg, #202020, #151515);
+            padding: 40px 30px 30px;
+            border-bottom: 1px solid #3a3a3a;
+            position: relative;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 10%;
+            width: 80%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #b8860b, #d4af37, #b8860b, transparent);
+        }
+
+        .welcome-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #e0e0e0, #b0b0b0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 10px rgba(255,215,0,0.3);
+            margin-bottom: 5px;
+            letter-spacing: 2px;
+        }
+
+        .welcome-sub {
+            color: #b8860b;
+            font-size: 1.2rem;
+            font-weight: 400;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            opacity: 0.9;
+        }
+
+        .category-nav {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #1e1e1e;
+            border-bottom: 1px solid #333;
+            padding: 0 20px;
+            gap: 5px;
+        }
+
+        .category-btn {
+            background: none;
+            border: none;
+            color: #aaa;
+            padding: 16px 24px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+            letter-spacing: 1px;
+        }
+
+        .category-btn:hover {
+            color: #f0f0f0;
+            background-color: #292929;
+        }
+
+        .category-btn.active {
+            color: #f5cb5c;
+            border-bottom: 3px solid #f5cb5c;
+            background: linear-gradient(0deg, rgba(245,203,92,0.1), transparent);
+        }
+
+        .content-area {
+            padding: 25px;
+            background-color: #181818;
+            min-height: 500px;
+        }
+
+        .topic {
+            background-color: #232323;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+            border-left: 5px solid #f5cb5c;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+        }
+
+        .topic-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .author-avatar {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, #3a3a3a, #222);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f5cb5c;
+            border: 2px solid #f5cb5c;
+        }
+
+        .author-info {
+            flex: 1;
+            cursor: pointer;
+        }
+
+        .author-name {
+            font-size: 1.4rem;
+            font-weight: 70
+
+
+0;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .verified-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #1e7b4c;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 0 5px #2ecc71;
+        }
+
+        .role-badge {
+            background-color: #2b2b2b;
+            padding: 5px 14px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: #d4af37;
+            border: 1px solid #d4af37;
+            letter-spacing: 0.5px;
+        }
+
+        .post-meta {
+            color: #888;
+            font-size: 0.9rem;
+            margin-top: 4px;
+        }
+
+        .topic-content {
+            color: #d0d0d0;
+            line-height: 1.6;
+            font-size: 1.1rem;
+            padding-left: 10px;
+            border-left: 3px solid #3a3a3a;
+            margin-left: 68px;
+        }
+
+        .topic-content p {
+            margin: 10px 0;
+        }
+
+        .project-list {
+            margin: 15px 0 10px;
+            background-color: #1e1e1e;
+            border-radius: 14px;
+            padding: 18px;
+        }
+
+        .project-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .project-item:last-child {
+            border-bottom: none;
+        }
+
+        .project-status {
+            min-width: 120px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .status-dev {
+            color: #4caf50;
+        }
+
+        .status-frozen {
+            color: #f44336;
+        }
+
+        .project-name {
+            font-weight: 500;
+            color: #e0e0e0;
+        }
+
+        .project-desc {
+            color: #aaa;
+            font-size: 0.95rem;
+            margin-left: auto;
+        }
+
+        .info-block {
+            background-color: #232323;
+            border-radius: 24px;
+            padding: 50px 30px;
+            text-align: center;
+            border: 2px dashed #f5cb5c;
+        }
+
+        .info-block h2 {
+            font-size: 3rem;
+            color: #f5cb5c;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .info-block p {
+            color: #b0b0b0;
+            font-size: 1.3rem;
+        }
+
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .social-card {
+            background-color: #232323;
+            border-radius: 20px;
+            padding: 25px 15px;
+            text-align: center;
+            border: 1px solid #3a3a3a;
+            transition: 0.2s;
+        }
+
+        .social-card:hover {
+            border-color: #f5cb5c;
+            transform: translateY(-5px);
+        }
+
+        .social-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .social-name {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .social-desc {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .support-content {
+            margin-top: 20px;
+            background-color: #1e1e1e;
+            border-radius: 16px;
+            padding: 25px;
+            color: #ccc;
+            font-size: 1.2rem;
+            text-align: center;
+        }
+
+        .support-content a {
+            color: #f5cb5c;
+            text-decoration: none;
+            font-weight: bold;
+            border-bottom: 2px solid #f5cb5c;
+        }
+
+        .support-content
+
+
+a:hover {
+            color: white;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active-section {
+            display: block;
+        }
+
+        .footer {
+            background-color: #121212;
+            padding: 15px 30px;
+            color: #666;
+            font-size: 0.9rem;
+            border-top: 1px solid #2a2a2a;
+            text-align: center;
+        }
+
+        .members-list {
+            background-color: #1e1e1e;
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 10px 0;
+            border-bottom: 1px solid #333;
+            cursor: pointer;
+        }
+
+        .member-item:last-child {
+            border-bottom: none;
+        }
+
+        .member-avatar-small {
+            width: 40px;
+            height: 40px;
+            background: #2a2a2a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #f5cb5c;
+            border: 1px solid #f5cb5c;
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-name {
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .member-role {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Попап */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-card {
+            background: #232323;
+            border-radius: 24px;
+            padding: 30px;
+            max-width: 350px;
+            width: 90%;
+            border: 2px solid #f5cb5c;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.9);
+            position: relative;
+            color: white;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #888;
+            transition: 0.2s;
+        }
+
+        .popup-close:hover {
+            color: #f5cb5c;
+        }
+
+        .popup-avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #3a3a3a, #222);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #f5cb5c;
+            border: 3px solid #f5cb5c;
+            margin: 0 auto 15px;
+        }
+
+        .popup-name {
+            font-size: 2rem;
+            font-weight: 700;
+            text-align: center;
+            color: #f5cb5c;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .popup-roles {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .popup-roles-title {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            letter-spacing: 1px;
+        }
+
+        .popup-role-item {
+            color: #f5cb5c;
+            font-weight: 500;
+            padding: 4px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .popup-role-item:last-child {
+            border-bottom: none;
+        }
+
+        .popup-contact {
+            background: #1a1a1a;
+            border-radius: 16px;
+            padding: 15px;
+        }
+
+        .popup-contact-title {
+            color:
+
+
+#aaa;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .popup-contact-value {
+            color: #f0f0f0;
+            font-family: monospace;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="forum-container">
+        <!-- ШАПКА -->
+        <div class="header">
+            <h1 class="welcome-title">Добро пожаловать в Dark Forge</h1>
+            <div class="welcome-sub">форум разработчиков и сообщества</div>
+        </div>
+
+        <!-- КНОПКИ РАЗДЕЛОВ -->
+        <div class="category-nav">
+            <button class="category-btn active" data-section="projects">📁 Проекты</button>
+            <button class="category-btn" data-section="news">📢 Новости и анонсы</button>
+            <button class="category-btn" data-section="faq">❓ Часто задаваемые вопросы</button>
+            <button class="category-btn" data-section="workshop">🔧 Мастерская Разработчиков</button>
+            <button class="category-btn" data-section="social">🌐 Соц сети</button>
+            <button class="category-btn" data-section="support">🛠️ Техническая поддержка</button>
+        </div>
+
+        <!-- КОНТЕНТ -->
+        <div class="content-area">
+            <!-- ПРОЕКТЫ -->
+            <div id="section-projects" class="section active-section">
+                <div class="topic">
+                    <div class="topic-header">
+                        <div class="author-avatar">L</div>
+                        <div class="author-info" onclick='showPopup("Linar", ["Команда разработки"], "—")'>
+                            <div class="author-name">
+                                Linar
+                                <span class="verified-badge">✓</span>
+                                <span class="role-badge">Команда разработки</span>
+                            </div>
+                            <div class="post-meta">Тема: Проекты студии</div>
+                        </div>
+                    </div>
+                    <div class="topic-content">
+                        <p><strong>В Разработке</strong></p>
+                        <div class="project-list">
+                            <div class="project-item">
+                                <span class="project-status status-dev">⚡ В РАЗРАБОТКЕ</span>
+                                <span class="project-name">Ryam World</span>
+                                <span class="project-desc">Основной проект вселенной</span>
+                            </div>
+                            <div class="project-item">
+                                <span class="project-status status-dev">⚡ В РАЗРАБОТКЕ</span>
+                                <span class="project-name">Quest Messenger</span>
+                                <span class="project-desc">совместно с GamesDeloPointAI (RYAMDELOKOMPANY)</span>
+                            </div>
+                            <div class="project-item">
+                                <span class="project-status status-frozen">❄️ ЗАМОРОЖЕНЫ</span>
+                                <span class="project-name">3D Хоррор игра</span>
+                                <span class="project-desc">(без названия)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- СПИСОК УЧАСТНИКОВ -->
+                <div class="members-list">
+                    <h3 style="color:#f5cb5c; margin-bottom:15px;">👥 Участники сообщества</h3>
+                    
+                    <div class="member-item" onclick='showPopup("Axtl", ["Владелец"], "—")'>
+                        <div class="member-avatar-small">A</div>
+                        <div class="member-info">
+                            <div class="member-name">Axtl <span class="verified-badge">✓</span></div>
+                            <div class="member-role">Владелец</div>
+                        </div>
+                    </div>
+
+                    <div class="member-item" onclick='showPopup("Linar
+
+
+", ["Команда разработки"], "—")'>
+                        <div class="member-avatar-small">L</div>
+                        <div class="member-info">
+                            <div class="member-name">Linar <span class="verified-badge">✓</span></div>
+                            <div class="member-role">Команда разработки</div>
+                        </div>
+                    </div>
+
+                    <div class="member-item" onclick='showPopup("Dark Forge", ["Служба безопасности", "Официальный аккаунт студии"], "—")'>
+                        <div class="member-avatar-small">D</div>
+                        <div class="member-info">
+                            <div class="member-name">Dark Forge <span class="verified-badge">✓</span></div>
+                            <div class="member-role">Служба безопасности / Офиц. аккаунт</div>
+                        </div>
+                    </div>
+
+                    <div class="member-item" onclick='showPopup("Kirill_Mod", ["Модератор", "Редактор"], "—")'>
+                        <div class="member-avatar-small">K</div>
+                        <div class="member-info">
+                            <div class="member-name">Kirill_Mod</div>
+                            <div class="member-role">Модератор, Редактор</div>
+                        </div>
+                    </div>
+
+                    <div class="member-item" onclick='showPopup("Alyona Kind", ["Пользователь"], "—")'>
+                        <div class="member-avatar-small">A</div>
+                        <div class="member-info">
+                            <div class="member-name">Alyona Kind</div>
+                            <div class="member-role">Пользователь</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- НОВОСТИ -->
+            <div id="section-news" class="section">
+                <div class="topic">
+                    <div class="topic-header">
+                        <div class="author-avatar">L</div>
+                        <div class="author-info" onclick='showPopup("Linar", ["Команда разработки"], "—")'>
+                            <div class="author-name">
+                                Linar
+                                <span class="verified-badge">✓</span>
+                                <span class="role-badge">Команда разработки</span>
+                            </div>
+                            <div class="post-meta">Тема: Новости и анонсы</div>
+                        </div>
+                    </div>
+                    <div class="topic-content">
+                        <p>Дорогие друзья!</p>
+                        <p>У нас отличные новости: прямо сейчас активно тестируется новая версия нашей игры. Мы сосредоточены на улучшении игрового процесса, устранении всех обнаруженных ошибок и создании увлекательных новых уровней (третьего и четвёртого).</p>
+                        <p>Спасибо каждому, кто делится своими впечатлениями и помогает нам сделать игру ещё лучше! Ваше мнение важно для нас.</p>
+                        <p>Следите за обновлениями и оставайтесь на связи!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div id="section-faq" class="section">
+                <div class="info-block">
+                    <h2>🔧 Технический перерыв</h2>
+                    <p>Раздел временно недоступен по техническим причинам. Приносим извинения!</p>
+                </div>
+            </div>
+
+            <!-- МАСТЕРСКАЯ -->
+            <div id="section-workshop" class="section">
+                <div class="topic">
+                    <div class="topic-header">
+                        <div class="author-avatar">D</div>
+                        <div class="author-info" onclick='showPopup("Dark Forge", ["Служба безопасности", "Официальный аккаунт студии"], "—")'>
+                            <div class="author-name">
+                                Dark Forge
+
+
+<span class="verified-badge">✓</span>
+                                <span class="role-badge">Служба безопасности</span>
+                            </div>
+                            <div class="post-meta">Тема: Мастерская Разработчиков</div>
+                        </div>
+                    </div>
+                    <div class="topic-content">
+                        <p>В этом разделе обсуждаются технические детали разработки, безопасность кода и внутренние процессы. Доступ ограничен для участников команды.</p>
+                        <p style="margin-top:15px;">🔒 По вопросам безопасности обращайтесь в личные сообщения к @DarkForge.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- СОЦСЕТИ -->
+            <div id="section-social" class="section">
+                <div class="social-grid">
+                    <div class="social-card">
+                        <span class="social-icon">📱</span>
+                        <div class="social-name">Telegram</div>
+                        <div class="social-desc">@darkforge_of</div>
+                    </div>
+                    <div class="social-card">
+                        <span class="social-icon">📘</span>
+                        <div class="social-name">ВКонтакте</div>
+                        <div class="social-desc">Потом будет</div>
+                    </div>
+                    <div class="social-card">
+                        <span class="social-icon">🐦</span>
+                        <div class="social-name">Макс</div>
+                        <div class="social-desc">Потом будет</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ТЕХПОДДЕРЖКА -->
+            <div id="section-support" class="section">
+                <div class="topic">
+                    <div class="topic-header">
+                        <div class="author-avatar">A</div>
+                        <div class="author-info" onclick='showPopup("Axtl", ["Владелец"], "—")'>
+                            <div class="author-name">
+                                Axtl
+                                <span class="verified-badge">✓</span>
+                                <span class="role-badge">Владелец</span>
+                            </div>
+                            <div class="post-meta">Тема: Официальный контакт поддержки</div>
+                        </div>
+                    </div>
+                    <div class="topic-content">
+                        <p><strong>Обратиться в техническую поддержку можно в Telegram:</strong></p>
+                        <div class="support-content">
+                            <a href="https://t.me/supDarkForgebot" target="_blank">@supDarkForgebot</a>
+                            <p style="margin-top: 15px;">⚡ Ответ в течение 24 часов ⚡</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ФУТЕР -->
+        <div class="footer">
+            Dark Forge Studio · Сообщество разработчиков
+        </div>
+    </div>
+
+    <!-- ПОПАП -->
+    <div id="profilePopup" class="popup-overlay">
+        <div class="popup-card">
+            <span class="popup-close" onclick="closePopup()">&times;</span>
+            <div id="popupAvatar" class="popup-avatar"></div>
+            <div id="popupName" class="popup-name"></div>
+            <div class="popup-roles">
+                <div class="popup-roles-title">РОЛИ</div>
+                <div id="popupRolesList"></div>
+            </div>
+            <div class="popup-contact">
+                <div class="popup-contact-title">СВЯЗЬ</div>
+                <div id="popupContact" class="popup-contact-value">—</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Переключение разделов
+        const buttons = document.querySelectorAll('.category-btn');
+        const sections = document.querySelectorAll('.section');
+
+        buttons.forEach(btn => {
+Техническая поддержка Dark Forge
+Техническая поддержка Dark Forge
+t.me
+
+
+btn.addEventListener('click', () => {
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                const sectionId = 'section-' + btn.getAttribute('data-section');
+                sections.forEach(s => s.classList.remove('active-section'));
+                document.getElementById(sectionId).classList.add('active-section');
+            });
+        });
+
+        // Попап
+        const popup = document.getElementById('profilePopup');
+        const popupAvatar = document.getElementById('popupAvatar');
+        const popupName = document.getElementById('popupName');
+        const popupRolesList = document.getElementById('popupRolesList');
+        const popupContact = document.getElementById('popupContact');
+
+        function showPopup(name, roles, contact) {
+            popupAvatar.innerText = name.charAt(0);
+            popupName.innerText = name;
+            
+            popupRolesList.innerHTML = '';
+            roles.forEach(role => {
+                const roleDiv = document.createElement('div');
+                roleDiv.className = 'popup-role-item';
+                roleDiv.innerText = role;
+                popupRolesList.appendChild(roleDiv);
+            });
+
+            popupContact.innerText = contact || '—';
+            popup.style.display = 'flex';
+        }
+
+        function closePopup() {
+            popup.style.display = 'none';
+        }
+
+        popup.addEventListener('click', (e) => {
+            if (e.target === popup) closePopup();
+        });
+    </script>
+</body>
+</html>
