@@ -111,7 +111,6 @@
             box-shadow: 0 4px 12px rgba(0,0,0,0.6);
         }
 
-        /* Автор (кликабельно) */
         .author {
             display: flex;
             align-items: center;
@@ -196,7 +195,6 @@
             margin-top: 10px;
         }
 
-        /* Список проектов */
         .project-list {
             background-color: #161616;
             border-radius: 16px;
@@ -247,7 +245,6 @@
             width: 100%;
         }
 
-        /* Список участников */
         .members {
             background-color: #1e1e1e;
             border-radius: 20px;
@@ -310,7 +307,6 @@
             font-size: 0.95rem;
         }
 
-        /* Соцсети */
         .social-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
@@ -342,7 +338,6 @@
             font-size: 0.9rem;
         }
 
-        /* Инфо-блок (FAQ) */
         .info-block {
             background-color: #1e1e1e;
             border-radius: 30px;
@@ -360,6 +355,33 @@
         .info-block p {
             color: #aaa;
             font-size: 1.2rem;
+        }
+
+        /* Ошибка 500 */
+        .error-block {
+            background-color: #2a1a1a;
+            border-radius: 30px;
+            padding: 40px 20px;
+            text-align: center;
+            border: 2px solid #f44336;
+        }
+
+        .error-block h2 {
+            font-size: 3rem;
+            color: #f44336;
+            margin-bottom: 15px;
+        }
+
+        .error-block p {
+            color: #ddd;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .error-contacts {
+            margin-top: 20px;
+            font-size: 1.1rem;
+            color: #f5cb5c;
         }
 
         /* Попап */
@@ -449,9 +471,96 @@
             color: #666;
             border-top: 1px solid #2a2a2a;
         }
+
+        /* Полное перекрытие форума */
+        .maintenance-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .maintenance-card {
+            background: #1e1e1e;
+            border-radius: 40px;
+            padding: 40px 20px;
+            max-width: 500px;
+            width: 100%;
+            border: 3px solid #f5cb5c;
+            text-align: center;
+        }
+
+        .maintenance-card h2 {
+            font-size: 2.5rem;
+            color: #f5cb5c;
+            margin-bottom: 20px;
+        }
+
+        .maintenance-card p {
+            color: #ccc;
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+        }
+
+        .maintenance-card a {
+            color: #f5cb5c;
+            font-size: 1.2rem;
+            text-decoration: none;
+            border-bottom: 2px solid #f5cb5c;
+        }
     </style>
 </head>
 <body>
+
+<!-- ⚙️ НАСТРОЙКА ПЕРЕКРЫТИЯ ФОРУМА -->
+<!-- 0 = форум работает -->
+<!-- 1 = технический перерыв -->
+<!-- 2 = форум отключён администрацией -->
+<div id="forumOverlay" class="maintenance-overlay" style="display: none;"></div>
+
+<script>
+(function() {
+    const mode = 0; // ⬅️ Меняй здесь 0, 1 или 2
+
+    const overlay = document.getElementById('forumOverlay');
+    const container = document.querySelector('.container');
+
+    if (mode === 0) {
+        overlay.style.display = 'none';
+        return;
+    }
+
+    let title = '';
+    let message = '';
+
+    if (mode === 1) {
+        title = '🔧 Технический перерыв';
+        message = 'Ведутся технические работы. Скоро всё заработает!';
+    } else if (mode === 2) {
+        title = '⛔ Форум отключён';
+        message = 'К сожалению, Администрация отключила форум.\nВся информация в Telegram канале.';
+    }
+
+    overlay.innerHTML = `
+        <div class="maintenance-card">
+            <h2>${title}</h2>
+            <p>${message.replace('\n', '<br>')}</p>
+            <p><a href="https://t.me/darkforge_of" target="_blank">📱 Перейти в Telegram</a></p>
+        </div>
+    `;
+    overlay.style.display = 'flex';
+    container.style.filter = 'blur(2px)';
+    container.style.pointerEvents = 'none';
+})();
+</script>
+
     <div class="container">
         <!-- ШАПКА -->
         <div class="header">
@@ -459,7 +568,7 @@
             <p>ФОРУМ СООБЩЕСТВА</p>
         </div>
 
-        <!-- НАВИГАЦИЯ (ГОРИЗОНТАЛЬНАЯ) -->
+        <!-- НАВИГАЦИЯ -->
         <div class="nav-wrapper">
             <div class="nav">
                 <button class="active" onclick="showSection('projects')">📁 Проекты</button>
@@ -468,6 +577,7 @@
                 <button onclick="showSection('workshop')">🔧 Мастерская</button>
                 <button onclick="showSection('social')">🌐 Соцсети</button>
                 <button onclick="showSection('support')">🛠️ Поддержка</button>
+                <button onclick="showSection('appeals')">📬 Обращения</button>
             </div>
         </div>
 
@@ -490,9 +600,9 @@
                     <div class="post-content">
                         <div class="project-list">
                             <div class="project-item">
-                                <span class="status dev">⚡ В РАЗРАБОТКЕ</span>
+                                <span class="status frozen">❄️ ЗАМОРОЖЕНО</span>
                                 <span class="project-name">Ryam World</span>
-                                <span class="project-desc">Основной проект</span>
+                                <span class="project-desc">Проект заморожен</span>
                             </div>
                             <div class="project-item">
                                 <span class="status dev">⚡ В РАЗРАБОТКЕ</span>
@@ -525,11 +635,18 @@
                             <div class="member-role">Команда разработки</div>
                         </div>
                     </div>
-                    <div class="member" onclick='showPopup("Dark Forge", ["Служба безопасности", "Официальный аккаунт"], "—")'>
+                    <div class="member" onclick='showPopup("Dark Forge", ["Служба безопасности", "Официальный аккаунт"], "@DarkForgeOfficial")'>
                         <div class="member-avatar">D</div>
                         <div class="member-info">
                             <div class="member-name">Dark Forge <span class="verified">✓</span></div>
                             <div class="member-role">Служба безопасности</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Egor", ["Команда Проекта"], "—")'>
+                        <div class="member-avatar">E</div>
+                        <div class="member-info">
+                            <div class="member-name">Egor <span class="verified">✓</span></div>
+                            <div class="member-role">Команда Проекта</div>
                         </div>
                     </div>
                     <div class="member" onclick='showPopup("Kirill_Mod", ["Модератор", "Редактор"], "—")'>
@@ -537,6 +654,27 @@
                         <div class="member-info">
                             <div class="member-name">Kirill_Mod</div>
                             <div class="member-role">Модератор, Редактор</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Maks_Virn", ["Участник"], "—")'>
+                        <div class="member-avatar">M</div>
+                        <div class="member-info">
+                            <div class="member-name">Maks_Virn</div>
+                            <div class="member-role">Участник</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Ulas_Ya", ["Участник"], "—")'>
+                        <div class="member-avatar">U</div>
+                        <div class="member-info">
+                            <div class="member-name">Ulas_Ya</div>
+                            <div class="member-role">Участник</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Time_Mit", ["Участник"], "—")'>
+                        <div class="member-avatar">T</div>
+                        <div class="member-info">
+                            <div class="member-name">Time_Mit</div>
+                            <div class="member-role">Участник</div>
                         </div>
                     </div>
                     <div class="member" onclick='showPopup("Alyona Kind", ["Пользователь"], "—")'>
@@ -549,7 +687,7 @@
                 </div>
             </div>
 
-            <!-- НОВОСТИ -->
+            <!-- НОВОСТИ (обновлено) -->
             <div id="news" class="section">
                 <div class="topic">
                     <div class="author" onclick='showPopup("Linar", ["Команда разработки"], "—")'>
@@ -560,29 +698,44 @@
                                 <span class="verified">✓</span>
                                 <span class="role-tag">Команда разработки</span>
                             </div>
-                            <div class="post-meta">Тема: Новости и анонсы</div>
+                            <div class="post-meta">Тема: Важное объявление</div>
                         </div>
                     </div>
                     <div class="post-content">
-                        <p style="margin-bottom:10px;"><b>Дорогие друзья!</b></p>
-                        <p>У нас отличные новости: прямо сейчас активно тестируется новая версия нашей игры. Мы сосредоточены на улучшении игрового процесса, устранении всех обнаруженных ошибок и создании увлекательных новых уровней (третьего и четвёртого).</p>
-                        <p style="margin-top:10px;">Спасибо каждому, кто делится своими впечатлениями и помогает нам сделать игру ещё лучше!</p>
+                        <p style="margin-bottom:10px;"><b>Дорогие друзья и поклонники нашего проекта!</b></p>
+                        <p>Сообщаем вам неприятную новость: Ольга Рям оказалась вовлеченной в судебное разбирательство, вследствие чего проект Ryam World вынужден временно прекратить свою деятельность.</p>
+                        <p>Игра заморожена до завершения судебных процессов и выяснения обстоятельств дела. Конечный исход ситуации повлияет на дальнейшее развитие проекта.</p>
+                        <p>Мы глубоко сожалеем о сложившейся ситуации и просим проявить терпение и понимание. Вся информация о дальнейших действиях будет сообщаться своевременно.</p>
+                        <p style="margin-top:10px;">Следите за новостями, оставайтесь с нами!</p>
+                        <p><b>Команда Ryam World + Dark Forge</b></p>
                     </div>
                 </div>
             </div>
 
-            <!-- FAQ -->
+            <!-- FAQ (обновлён) -->
             <div id="faq" class="section">
-                <div class="info-block">
-                    <h2>🔧</h2>
-                    <p>Технический перерыв</p>
+                <div class="topic">
+                    <div class="author" onclick='showPopup("Egor", ["Команда Проекта"], "—")'>
+                        <div class="avatar">E</div>
+                        <div class="author-info">
+                            <div class="name-line">
+                                <span class="name">Egor</span>
+                                <span class="verified">✓</span>
+                                <span class="role-tag">Команда Проекта</span>
+                            </div>
+                            <div class="post-meta">Тема: Информация</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        Раздел заполняется
+                    </div>
                 </div>
             </div>
 
             <!-- МАСТЕРСКАЯ -->
             <div id="workshop" class="section">
                 <div class="topic">
-                    <div class="author" onclick='showPopup("Dark Forge", ["Служба безопасности", "Официальный аккаунт"], "—")'>
+                    <div class="author" onclick='showPopup("Dark Forge", ["Служба безопасности", "Официальный аккаунт"], "@DarkForgeOfficial")'>
                         <div class="avatar">D</div>
                         <div class="author-info">
                             <div class="name-line">
@@ -641,6 +794,19 @@
                     </div>
                 </div>
             </div>
+
+            <!-- ОБРАЩЕНИЯ (новый раздел с ошибкой 500) -->
+            <div id="appeals" class="section">
+                <div class="error-block">
+                    <h2>500</h2>
+                    <p><b>Internal Server Error</b></p>
+                    <p>Обратитесь в службу поддержки или к менеджеру</p>
+                    <div class="error-contacts">
+                        <p>Менеджер: @DarkForgeManger</p>
+                        <p>Техническая поддержка: @supDarkForgebot</p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- ФУТЕР -->
@@ -664,7 +830,7 @@
         function showSection(id) {
             document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
             document.getElementById(id).classList.add('active');
-            
+
             document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
             event.target.classList.add('active');
         }
@@ -672,13 +838,13 @@
         function showPopup(name, roles, contact) {
             document.getElementById('popupAvatar').innerText = name.charAt(0);
             document.getElementById('popupName').innerText = name;
-            
+
             let rolesHtml = '';
             roles.forEach(role => {
                 rolesHtml += `<div class="popup-role-item">${role}</div>`;
             });
             document.getElementById('popupRoles').innerHTML = rolesHtml;
-            
+
             document.getElementById('popupContact').innerText = contact ? `Связь: ${contact}` : 'Связь: —';
             document.getElementById('popupOverlay').style.display = 'flex';
         }
@@ -688,4 +854,4 @@
         }
     </script>
 </body>
-                              </html>
+</html>
