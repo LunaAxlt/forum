@@ -2,402 +2,332 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Luna Axlt — Форум</title>
-    <!-- Подключаем Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #121212;
-            --bg-card: #1a1a1a;
-            --accent-gold: #f5cb5c;
-            --accent-gold-dark: #d4af37;
-            --text-primary: #ffffff;
-            --text-secondary: #b0b0b0;
-            --text-muted: #666666;
-            --border-color: #2a2a2a;
-            --success: #27ae60;
-            --danger: #e74c3c;
-            --warning: #e67e22;
-            --info: #3498db;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
 
         body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            font-size: 16px;
-            line-height: 1.5;
-            padding: 20px;
-            min-height: 100vh;
+            background-color: #0a0a0a;
+            color: #fff;
+            padding: 10px;
         }
 
         .container {
-            max-width: 1200px;
-            margin: 0 auto;
+            max-width: 100%;
+            background-color: #121212;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
         }
 
         /* Шапка */
         .header {
-            background: var(--bg-secondary);
-            border-radius: 20px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border-color);
-            position: relative;
+            background: linear-gradient(145deg, #1e1e1e, #141414);
+            padding: 25px 20px 20px;
+            text-align: center;
+            border-bottom: 2px solid #f5cb5c;
         }
 
         .header h1 {
-            color: var(--accent-gold);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
+            color: #f5cb5c;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 5px;
         }
 
         .header p {
-            color: var(--text-secondary);
+            color: #aaa;
+            font-size: 1rem;
+        }
+
+        /* Кнопки авторизации */
+        .auth-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            background: #1a1a1a;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .btn {
+            background: #f5cb5c;
+            color: #121212;
+            border: none;
+            border-radius: 40px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            max-width: 150px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #f5cb5c;
+            border: 2px solid #f5cb5c;
         }
 
         /* Навигация */
         .nav {
             display: flex;
-            gap: 15px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            overflow-x: auto;
+            white-space: nowrap;
+            background: #1a1a1a;
+            border-bottom: 1px solid #2a2a2a;
+            scrollbar-width: none;
         }
 
-        .nav-btn {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-            padding: 12px 25px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.3s;
+        .nav button {
+            background: none;
+            border: none;
+            color: #999;
+            padding: 15px 20px;
             font-size: 1rem;
-        }
-
-        .nav-btn:hover {
-            border-color: var(--accent-gold);
-            color: var(--accent-gold);
-        }
-
-        .nav-btn.active {
-            background: var(--accent-gold);
-            color: var(--bg-primary);
-            border-color: var(--accent-gold);
-        }
-
-        /* Карточки разделов */
-        .categories {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .category-card {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 20px;
-            border: 1px solid var(--border-color);
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
         }
 
-        .category-card:hover {
-            border-color: var(--accent-gold);
-            transform: translateY(-2px);
+        .nav button.active {
+            color: #f5cb5c;
+            border-bottom: 3px solid #f5cb5c;
+            background: linear-gradient(0deg, rgba(245,203,92,0.1), transparent);
         }
 
-        .category-card h3 {
-            color: var(--accent-gold);
-            margin-bottom: 10px;
-        }
-
-        .category-card p {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-
-        /* Список тем */
-        .topics {
-            background: var(--bg-card);
-            border-radius: 15px;
+        /* Контент */
+        .content {
             padding: 20px;
-            border: 1px solid var(--border-color);
+            min-height: 400px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Карточка темы (как в старом дизайне) */
+        .topic-card {
+            background: #1e1e1e;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #f5cb5c;
+        }
+
+        .author-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .avatar {
+            width: 50px;
+            height: 50px;
+            background: #252525;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #f5cb5c;
+            border: 2px solid #f5cb5c;
+        }
+
+        .author-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .verified-badge {
+            background: #1e7b4c;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            margin-left: 5px;
+        }
+
+        .role-tag {
+            background: #2b2b2b;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #f5cb5c;
+            border: 1px solid #f5cb5c;
+        }
+
+        .topic-meta {
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 5px;
+        }
+
+        /* Проекты (как в старом форуме) */
+        .project-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .status {
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 30px;
+        }
+
+        .status.dev {
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .status.frozen {
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+
+        /* Список тем форума */
+        .topics-list {
+            background: #1e1e1e;
+            border-radius: 20px;
+            overflow: hidden;
         }
 
         .topic-item {
-            display: flex;
-            align-items: center;
             padding: 15px;
-            border-bottom: 1px solid var(--border-color);
+            border-bottom: 1px solid #2a2a2a;
             cursor: pointer;
-            transition: background 0.3s;
         }
 
         .topic-item:last-child {
             border-bottom: none;
         }
 
-        .topic-item:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .topic-prefix {
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            margin-right: 15px;
-            color: white;
-        }
-
         .topic-title {
-            flex: 1;
-            font-weight: 500;
-        }
-
-        .topic-meta {
-            color: var(--text-muted);
-            font-size: 0.85rem;
-            margin-left: 20px;
-        }
-
-        .topic-pinned {
-            color: var(--accent-gold);
-            margin-right: 10px;
-        }
-
-        /* Форма входа */
-        .auth-form {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 400px;
-            margin: 50px auto;
-            border: 1px solid var(--border-color);
-        }
-
-        .auth-form h2 {
-            color: var(--accent-gold);
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            color: var(--text-secondary);
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            background: var(--bg-primary);
-            border: 1px solid var(--border-color);
-            border-radius: 10px;
-            color: var(--text-primary);
-            font-size: 1rem;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--accent-gold);
-        }
-
-        .btn {
-            background: var(--accent-gold);
-            color: var(--bg-primary);
-            border: none;
-            padding: 12px 25px;
-            border-radius: 30px;
-            cursor: pointer;
-            font-size: 1rem;
             font-weight: 600;
-            transition: all 0.3s;
-            width: 100%;
-        }
-
-        .btn:hover {
-            background: var(--accent-gold-dark);
-        }
-
-        .btn-secondary {
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border: 1px solid var(--border-color);
-        }
-
-        .btn-secondary:hover {
-            border-color: var(--accent-gold);
-        }
-
-        /* Админ-панель */
-        .admin-panel {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 30px;
-            border: 1px solid var(--border-color);
-            margin-top: 30px;
-        }
-
-        .admin-panel h2 {
-            color: var(--accent-gold);
-            margin-bottom: 20px;
-        }
-
-        .users-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .users-table th {
-            text-align: left;
-            padding: 12px;
-            background: var(--bg-primary);
-            color: var(--text-secondary);
-            border-bottom: 2px solid var(--border-color);
-        }
-
-        .users-table td {
-            padding: 12px;
-            border-bottom: 1px solid var(--border-color);
-        }
-
-        .users-table tr:hover {
-            background: rgba(255, 255, 255, 0.05);
-        }
-
-        .role-badge {
-            display: inline-block;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
             color: white;
+            margin-bottom: 5px;
         }
 
-        .action-btn {
-            background: none;
-            border: 1px solid var(--border-color);
-            color: var(--text-primary);
-            padding: 6px 12px;
-            border-radius: 15px;
-            cursor: pointer;
-            margin-right: 5px;
-            font-size: 0.85rem;
-        }
-
-        .action-btn:hover {
-            border-color: var(--accent-gold);
-        }
-
-        .action-btn.danger:hover {
-            border-color: var(--danger);
-            color: var(--danger);
-        }
-
-        /* Кто онлайн */
-        .online-users {
-            background: var(--bg-card);
-            border-radius: 15px;
-            padding: 20px;
-            margin-top: 30px;
-            border: 1px solid var(--border-color);
-        }
-
-        .online-users h3 {
-            color: var(--accent-gold);
-            margin-bottom: 15px;
-        }
-
-        .online-list {
+        .topic-info {
             display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .online-user {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 15px;
-            background: var(--bg-primary);
-            border-radius: 30px;
-            border: 1px solid var(--border-color);
-        }
-
-        .online-emoji {
-            font-size: 1.2rem;
-        }
-
-        .online-name {
-            color: var(--text-primary);
-        }
-
-        .online-role {
-            color: var(--text-muted);
+            justify-content: space-between;
+            color: #888;
             font-size: 0.85rem;
         }
 
         /* Сообщения */
-        .messages {
-            margin-top: 30px;
-        }
-
         .message-item {
-            background: var(--bg-card);
+            background: #1e1e1e;
             border-radius: 15px;
-            padding: 20px;
+            padding: 15px;
             margin-bottom: 15px;
-            border: 1px solid var(--border-color);
         }
 
         .message-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 15px;
+            gap: 10px;
+            margin-bottom: 10px;
         }
 
         .message-author {
+            color: #f5cb5c;
             font-weight: 600;
-            color: var(--accent-gold);
-        }
-
-        .message-role {
-            font-size: 0.85rem;
-            color: var(--text-muted);
         }
 
         .message-date {
             margin-left: auto;
-            color: var(--text-muted);
-            font-size: 0.85rem;
+            color: #888;
+            font-size: 0.8rem;
         }
 
-        .message-content {
-            color: var(--text-secondary);
-            line-height: 1.6;
+        /* Форма обратной связи */
+        .appeal-form {
+            background: #1e1e1e;
+            border-radius: 20px;
+            padding: 25px;
         }
 
-        .message-actions {
-            margin-top: 15px;
-            display: flex;
-            gap: 10px;
+        .appeal-form input,
+        .appeal-form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #232323;
+            border: 2px solid #2a2a2a;
+            border-radius: 15px;
+            color: white;
         }
 
-        /* Модальное окно */
+        .appeal-form button {
+            width: 100%;
+            background: #f5cb5c;
+            color: #121212;
+            border: none;
+            border-radius: 30px;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Админка */
+        .admin-panel {
+            background: #1e1e1e;
+            border-radius: 20px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .admin-panel table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 500px;
+        }
+
+        .admin-panel th,
+        .admin-panel td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .admin-panel th {
+            color: #f5cb5c;
+        }
+
+        .admin-btn {
+            background: none;
+            border: 1px solid #2a2a2a;
+            color: #f5cb5c;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        /* Модальные окна */
         .modal {
             display: none;
             position: fixed;
@@ -405,35 +335,44 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            padding: 20px;
         }
 
-        .modal-content {
-            background: var(--bg-card);
-            border-radius: 20px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            border: 2px solid var(--accent-gold);
+        .modal-card {
+            background: #1e1e1e;
+            border-radius: 30px;
+            padding: 30px 20px;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #f5cb5c;
         }
 
-        .modal h3 {
-            color: var(--accent-gold);
+        .modal-card h3 {
+            color: #f5cb5c;
             margin-bottom: 20px;
+        }
+
+        .modal-card input,
+        .modal-card textarea,
+        .modal-card select {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #232323;
+            border: 2px solid #2a2a2a;
+            border-radius: 15px;
+            color: white;
         }
 
         .modal-close {
             float: right;
-            font-size: 24px;
+            font-size: 28px;
+            color: #888;
             cursor: pointer;
-            color: var(--text-muted);
-        }
-
-        .modal-close:hover {
-            color: var(--accent-gold);
         }
 
         /* Уведомления */
@@ -442,793 +381,513 @@
             top: 20px;
             right: 20px;
             padding: 15px 25px;
+            background: #1e1e1e;
+            border-left: 4px solid #f5cb5c;
             border-radius: 10px;
-            background: var(--bg-card);
-            border-left: 4px solid var(--accent-gold);
-            color: var(--text-primary);
+            color: white;
             z-index: 1001;
-            animation: slideIn 0.3s;
+            display: none;
         }
 
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Загрузка */
-        .loading {
+        .footer {
+            padding: 15px;
             text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-        }
-
-        .loading::after {
-            content: '';
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            margin-left: 10px;
-            border: 2px solid var(--accent-gold);
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Адаптация */
-        @media (max-width: 768px) {
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .categories {
-                grid-template-columns: 1fr;
-            }
-            
-            .users-table {
-                font-size: 0.9rem;
-            }
-            
-            .action-btn {
-                padding: 4px 8px;
-                font-size: 0.8rem;
-            }
+            color: #666;
+            border-top: 1px solid #2a2a2a;
+            font-size: 0.9rem;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <!-- Шапка -->
+        <!-- ШАПКА -->
         <div class="header">
-            <h1>Luna Axlt Studios</h1>
-            <p>Форум сообщества</p>
-            <div style="position: absolute; top: 30px; right: 30px;">
-                <button class="nav-btn" onclick="showAuthModal()" id="authBtn">Вход / Регистрация</button>
-                <button class="nav-btn" style="display: none;" id="profileBtn" onclick="showProfile()">Профиль</button>
+            <h1>Luna Axlt</h1>
+            <p>ФОРУМ СООБЩЕСТВА</p>
+        </div>
+
+        <!-- КНОПКИ ВХОДА/РЕГИСТРАЦИИ -->
+        <div class="auth-bar">
+            <button class="btn" id="loginBtn" onclick="showAuthModal('login')">Вход</button>
+            <button class="btn-outline" id="registerBtn" onclick="showAuthModal('register')">Регистрация</button>
+            <button class="btn-outline" id="profileBtn" style="display:none;" onclick="showProfile()">Профиль</button>
+        </div>
+
+        <!-- НАВИГАЦИЯ -->
+        <div class="nav" id="nav">
+            <button class="active" onclick="switchSection('projects')">📁 Проекты</button>
+            <button onclick="switchSection('news')">📢 Новости</button>
+            <button onclick="switchSection('faq')">❓ FAQ</button>
+            <button onclick="switchSection('workshop')">🔧 Мастерская</button>
+            <button onclick="switchSection('social')">🌐 Соцсети</button>
+            <button onclick="switchSection('appeals')">📬 Обращения</button>
+            <button onclick="switchSection('forum')">💬 Форум</button>
+            <button id="adminBtn" style="display:none;" onclick="switchSection('admin')">⚙️ Админка</button>
+        </div>
+
+        <!-- КОНТЕНТ -->
+        <div class="content" id="content">
+            <!-- ПРОЕКТЫ -->
+            <div id="projectsSection" class="section active">
+                <div class="topic-card">
+                    <div class="author-row">
+                        <div class="avatar">L</div>
+                        <div>
+                            <span class="author-name">Linar <span class="verified-badge">✓</span></span>
+                            <span class="role-tag" style="margin-left:10px;">Команда разработки</span>
+                        </div>
+                    </div>
+                    <div class="topic-meta">Проекты студии</div>
+                    <div style="margin-top:15px;">
+                        <div class="project-item">
+                            <span class="status frozen">❄️ ЗАМОРОЖЕНО</span>
+                            <span style="color:white;">Ryam World</span>
+                        </div>
+                        <div class="project-item">
+                            <span class="status dev">⚡ В РАЗРАБОТКЕ</span>
+                            <span style="color:white;">Quest Messenger</span>
+                        </div>
+                        <div class="project-item">
+                            <span class="status frozen">❄️ ЗАМОРОЖЕНО</span>
+                            <span style="color:white;">3D Хоррор</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- НОВОСТИ -->
+            <div id="newsSection" class="section">
+                <div class="topic-card">
+                    <div class="author-row">
+                        <div class="avatar">L</div>
+                        <div>
+                            <span class="author-name">Linar <span class="verified-badge">✓</span></span>
+                            <span class="role-tag">Команда разработки</span>
+                        </div>
+                    </div>
+                    <div class="topic-meta">Важное объявление</div>
+                    <div style="margin-top:15px; color:#ddd;">
+                        <p>Дорогие друзья! Проект Ryam World заморожен из-за судебных разбирательств.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ -->
+            <div id="faqSection" class="section">
+                <div class="topic-card">
+                    <div class="author-row">
+                        <div class="avatar">E</div>
+                        <div>
+                            <span class="author-name">Egor <span class="verified-badge">✓</span></span>
+                            <span class="role-tag">Команда Проекта</span>
+                        </div>
+                    </div>
+                    <div class="topic-meta">Информация</div>
+                    <div style="margin-top:15px;">Раздел заполняется</div>
+                </div>
+            </div>
+
+            <!-- МАСТЕРСКАЯ -->
+            <div id="workshopSection" class="section">
+                <div class="topic-card">
+                    <div class="author-row">
+                        <div class="avatar">D</div>
+                        <div>
+                            <span class="author-name">Dark Forge <span class="verified-badge">✓</span></span>
+                            <span class="role-tag">Служба безопасности</span>
+                        </div>
+                    </div>
+                    <div class="topic-meta">Мастерская разработчиков</div>
+                    <div style="margin-top:15px;">Технические обсуждения проектов</div>
+                </div>
+            </div>
+
+            <!-- СОЦСЕТИ -->
+            <div id="socialSection" class="section">
+                <div class="topic-card">
+                    <h3 style="color:#f5cb5c; margin-bottom:15px;">Наши соцсети</h3>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <div>📱 Telegram: @darkforge_of</div>
+                        <div>📘 ВКонтакте: Потом будет</div>
+                        <div>🐦 Макс: Потом будет</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ОБРАЩЕНИЯ -->
+            <div id="appealsSection" class="section">
+                <div class="appeal-form">
+                    <h3 style="color:#f5cb5c; margin-bottom:20px;">Оставить обращение</h3>
+                    <input type="text" id="appealName" placeholder="Ваше имя" value="Гость">
+                    <input type="email" id="appealEmail" placeholder="Ваш email">
+                    <textarea id="appealMessage" rows="4" placeholder="Опишите вашу проблему..."></textarea>
+                    <button onclick="sendAppeal()">Отправить</button>
+                    <div id="appealResult" style="text-align:center; margin-top:15px; color:#888;"></div>
+                </div>
+            </div>
+
+            <!-- ФОРУМ (динамический) -->
+            <div id="forumSection" class="section">
+                <div style="margin-bottom:15px;">
+                    <button class="btn" style="width:100%;" onclick="showNewTopicModal()" id="newTopicBtn">➕ Новая тема</button>
+                </div>
+                <div id="forumTopics" class="topics-list">
+                    <div style="text-align:center; padding:30px; color:#888;">Загрузка...</div>
+                </div>
+            </div>
+
+            <!-- АДМИНКА -->
+            <div id="adminSection" class="section">
+                <div class="admin-panel" id="adminContent">
+                    <p style="text-align:center;">Загрузка...</p>
+                </div>
             </div>
         </div>
 
-        <!-- Навигация -->
-        <div class="nav">
-            <button class="nav-btn active" onclick="showSection('categories')">Разделы</button>
-            <button class="nav-btn" onclick="showSection('topics')">Темы</button>
-            <button class="nav-btn" onclick="showSection('online')">Кто онлайн</button>
-            <button class="nav-btn" id="adminNavBtn" style="display: none;" onclick="showSection('admin')">Админ-панель</button>
+        <div class="footer">
+            Luna Axlt Studios · 2026
         </div>
-
-        <!-- Контент -->
-        <div id="content"></div>
     </div>
 
-    <!-- Модальное окно авторизации -->
+    <!-- МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ -->
     <div class="modal" id="authModal">
-        <div class="modal-content">
+        <div class="modal-card">
             <span class="modal-close" onclick="closeModal('authModal')">&times;</span>
-            <h3>Вход в форум</h3>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="authEmail" placeholder="your@email.com">
-            </div>
-            <div class="form-group">
-                <label>Пароль</label>
-                <input type="password" id="authPassword" placeholder="********">
-            </div>
-            <button class="btn" onclick="login()">Войти</button>
-            <p style="text-align: center; margin: 15px 0; color: var(--text-muted);">или</p>
-            <button class="btn btn-secondary" onclick="showRegister()">Зарегистрироваться</button>
-        </div>
-    </div>
-
-    <!-- Модальное окно регистрации -->
-    <div class="modal" id="registerModal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('registerModal')">&times;</span>
-            <h3>Регистрация</h3>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" id="regEmail" placeholder="your@email.com">
-            </div>
-            <div class="form-group">
-                <label>Пароль</label>
-                <input type="password" id="regPassword" placeholder="********">
-            </div>
-            <div class="form-group">
-                <label>Никнейм</label>
-                <input type="text" id="regUsername" placeholder="Как вас зовут?">
-            </div>
-            <div class="form-group">
-                <label>Выберите эмодзи</label>
-                <select id="regEmoji" style="width: 100%; padding: 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-primary);">
+            <h3 id="authTitle">Вход</h3>
+            <input type="email" id="authEmail" placeholder="Email">
+            <input type="password" id="authPassword" placeholder="Пароль">
+            <div id="registerExtra" style="display:none;">
+                <input type="text" id="authUsername" placeholder="Никнейм">
+                <select id="authEmoji">
                     <option value="😎">😎 Крутой</option>
                     <option value="🦊">🦊 Лис</option>
                     <option value="🐉">🐉 Дракон</option>
                     <option value="👻">👻 Призрак</option>
                     <option value="🤖">🤖 Робот</option>
-                    <option value="😺">😺 Кот</option>
                 </select>
             </div>
-            <button class="btn" onclick="register()">Зарегистрироваться</button>
+            <button class="btn" id="authActionBtn" onclick="handleAuth()">Войти</button>
+            <p style="text-align:center; margin-top:15px;">
+                <a href="#" id="authToggleLink" onclick="toggleAuthMode()" style="color:#f5cb5c;">Нет аккаунта? Зарегистрироваться</a>
+            </p>
         </div>
     </div>
 
-    <!-- Модальное окно новой темы -->
+    <!-- МОДАЛЬНОЕ ОКНО НОВОЙ ТЕМЫ -->
     <div class="modal" id="newTopicModal">
-        <div class="modal-content">
+        <div class="modal-card">
             <span class="modal-close" onclick="closeModal('newTopicModal')">&times;</span>
             <h3>Новая тема</h3>
-            <div class="form-group">
-                <label>Заголовок</label>
-                <input type="text" id="topicTitle" placeholder="О чём хотите поговорить?">
-            </div>
-            <div class="form-group">
-                <label>Раздел</label>
-                <select id="topicCategory" style="width: 100%; padding: 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-primary);"></select>
-            </div>
-            <div class="form-group">
-                <label>Сообщение</label>
-                <textarea id="topicContent" rows="5" style="width: 100%; padding: 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-primary); resize: vertical;"></textarea>
-            </div>
+            <input type="text" id="topicTitle" placeholder="Заголовок">
+            <textarea id="topicContent" rows="4" placeholder="Что хотите обсудить?"></textarea>
             <button class="btn" onclick="createTopic()">Создать тему</button>
         </div>
     </div>
 
-    <!-- Модальное окно бана/мута (админка) -->
-    <div class="modal" id="moderateModal">
-        <div class="modal-content">
-            <span class="modal-close" onclick="closeModal('moderateModal')">&times;</span>
-            <h3>Модерация</h3>
-            <input type="hidden" id="moderateUserId">
-            <div class="form-group">
-                <label>Действие</label>
-                <select id="moderateAction" style="width: 100%; padding: 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-primary);">
-                    <option value="ban">Забанить</option>
-                    <option value="mute">Замутить</option>
-                    <option value="warn">Предупреждение</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Причина</label>
-                <input type="text" id="moderateReason" placeholder="Почему?">
-            </div>
-            <div class="form-group" id="expiresGroup">
-                <label>Длительность (часов, для мута)</label>
-                <input type="number" id="moderateHours" value="24" min="1" max="720">
-            </div>
-            <button class="btn" onclick="applyModeration()">Применить</button>
-        </div>
-    </div>
-
-    <!-- Уведомления -->
-    <div id="notification" class="notification" style="display: none;"></div>
+    <!-- УВЕДОМЛЕНИЯ -->
+    <div class="notification" id="notification"></div>
 
     <script>
-        // Инициализация Supabase
-        const supabaseUrl = 'https://luna-axlt-forum.supabase.co';
-        const supabaseKey = 'sb_publishable_wCEqbtTXXiTq6ThccQe4fA_K-61hi-G';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        // НАСТРОЙКА SUPABASE
+        const supabase = window.supabase.createClient(
+            'https://luna-axlt-forum.supabase.co',
+            'sb_publishable_wCEqbtTXXiTq6ThccQe4fA_K-61hi-G'
+        );
 
-        // Глобальные переменные
         let currentUser = null;
-        let currentSection = 'categories';
-        let selectedCategory = null;
-        let selectedTopic = null;
-        let categories = [];
-        let topics = [];
-        let posts = [];
-        let users = [];
-        let roles = [];
+        let isLoginMode = true;
+        let currentTopicId = null;
 
-        // Проверка авторизации при загрузке
+        // ПРОВЕРКА ПОЛЬЗОВАТЕЛЯ
         checkUser();
+        loadTopics();
 
-        // Загрузка начальных данных
-        loadCategories();
+        // ПЕРЕКЛЮЧЕНИЕ РАЗДЕЛОВ
+        function switchSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section + 'Section').classList.add('active');
+            
+            document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
 
-        // Проверка пользователя
+            if (section === 'forum') loadTopics();
+            if (section === 'admin') loadAdminPanel();
+        }
+
+        // ПРОВЕРКА ПОЛЬЗОВАТЕЛЯ
         async function checkUser() {
-            const { data: { user }, error } = await supabase.auth.getUser();
-            if (user) {
-                currentUser = user;
-                document.getElementById('authBtn').style.display = 'none';
-                document.getElementById('profileBtn').style.display = 'inline-block';
-                
-                // Загружаем профиль с ролью
+            const { data } = await supabase.auth.getUser();
+            if (data.user) {
                 const { data: profile } = await supabase
                     .from('profiles')
                     .select('*, roles(*)')
-                    .eq('id', user.id)
+                    .eq('id', data.user.id)
                     .single();
                 
                 if (profile) {
-                    currentUser.profile = profile;
-                    if (profile.roles?.name === 'Команда форума' || profile.roles?.name === 'Команда проекта') {
-                        document.getElementById('adminNavBtn').style.display = 'inline-block';
+                    currentUser = { ...data.user, profile };
+                    document.getElementById('loginBtn').style.display = 'none';
+                    document.getElementById('registerBtn').style.display = 'none';
+                    document.getElementById('profileBtn').style.display = 'block';
+                    
+                    if (profile.roles?.name === 'Команда форума') {
+                        document.getElementById('adminBtn').style.display = 'block';
                     }
                 }
             }
         }
 
-        // Показать раздел
-        function showSection(section) {
-            currentSection = section;
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            if (section === 'categories') loadCategories();
-            else if (section === 'topics') loadTopics();
-            else if (section === 'online') loadOnlineUsers();
-            else if (section === 'admin') loadAdminPanel();
+        // АВТОРИЗАЦИЯ
+        function showAuthModal(mode) {
+            isLoginMode = mode === 'login';
+            document.getElementById('authTitle').innerText = isLoginMode ? 'Вход' : 'Регистрация';
+            document.getElementById('authActionBtn').innerText = isLoginMode ? 'Войти' : 'Зарегистрироваться';
+            document.getElementById('registerExtra').style.display = isLoginMode ? 'none' : 'block';
+            document.getElementById('authToggleLink').innerText = isLoginMode ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти';
+            document.getElementById('authModal').style.display = 'flex';
         }
 
-        // Загрузка разделов
-        async function loadCategories() {
-            const { data, error } = await supabase
-                .from('categories')
-                .select('*')
-                .order('sort_order');
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            document.getElementById('authTitle').innerText = isLoginMode ? 'Вход' : 'Регистрация';
+            document.getElementById('authActionBtn').innerText = isLoginMode ? 'Войти' : 'Зарегистрироваться';
+            document.getElementById('registerExtra').style.display = isLoginMode ? 'none' : 'block';
+            document.getElementById('authToggleLink').innerText = isLoginMode ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти';
+        }
+
+        async function handleAuth() {
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPassword').value;
             
-            if (error) {
-                showNotification('Ошибка загрузки разделов', 'danger');
-                return;
+            if (isLoginMode) {
+                const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
+                if (error) return showNotif(error.message, 'danger');
+                showNotif('Добро пожаловать!', 'success');
+            } else {
+                const username = document.getElementById('authUsername').value;
+                const emoji = document.getElementById('authEmoji').value;
+                if (!username) return showNotif('Введите никнейм', 'warning');
+                
+                const { data, error } = await supabase.auth.signUp({ email, password: pass });
+                if (error) return showNotif(error.message, 'danger');
+                
+                await supabase.from('profiles').insert({
+                    id: data.user.id,
+                    username,
+                    avatar_emoji: emoji,
+                    role_id: 5
+                });
+                showNotif('Регистрация успешна!', 'success');
             }
             
-            categories = data;
-            renderCategories();
+            closeModal('authModal');
+            checkUser();
         }
 
-        // Отрисовка разделов
-        function renderCategories() {
-            let html = '<div class="categories">';
-            
-            categories.forEach(cat => {
-                html += `
-                    <div class="category-card" onclick="selectCategory(${cat.id})">
-                        <h3>${cat.name}</h3>
-                        <p>${cat.description || ''}</p>
-                    </div>
-                `;
-            });
-            
-            html += '</div>';
-            document.getElementById('content').innerHTML = html;
-        }
-
-        // Выбор раздела
-        function selectCategory(categoryId) {
-            selectedCategory = categoryId;
-            loadTopics(categoryId);
-        }
-
-        // Загрузка тем
-        async function loadTopics(categoryId = null) {
-            let query = supabase
+        // ЗАГРУЗКА ТЕМ ФОРУМА
+        async function loadTopics() {
+            const { data } = await supabase
                 .from('topics')
-                .select('*, profiles(username, avatar_emoji, roles(*)), prefixes(*)')
-                .order('is_pinned', { ascending: false })
+                .select('*, profiles(username)')
                 .order('created_at', { ascending: false });
             
-            if (categoryId) {
-                query = query.eq('category_id', categoryId);
+            let html = '<div class="topics-list">';
+            if (data?.length === 0) {
+                html += '<p style="text-align:center; padding:30px;">Пока нет тем</p>';
+            } else {
+                data?.forEach(t => {
+                    html += `
+                        <div class="topic-item" onclick="viewTopic(${t.id})">
+                            <div class="topic-title">${t.title}</div>
+                            <div class="topic-info">
+                                <span>${t.profiles?.username || 'User'}</span>
+                                <span>${new Date(t.created_at).toLocaleDateString()}</span>
+                            </div>
+                        </div>
+                    `;
+                });
             }
-            
-            const { data, error } = await query;
-            
-            if (error) {
-                showNotification('Ошибка загрузки тем', 'danger');
-                return;
-            }
-            
-            topics = data;
-            renderTopics();
-        }
-
-        // Отрисовка тем
-        function renderTopics() {
-            let html = `
-                <div class="topics">
-                    ${currentUser ? '<button class="btn" style="width: auto; margin-bottom: 20px;" onclick="showNewTopicModal()">➕ Новая тема</button>' : ''}
-            `;
-            
-            topics.forEach(topic => {
-                const prefix = topic.prefixes || { name: '', color: '#ffffff', bg_color: 'transparent' };
-                html += `
-                    <div class="topic-item" onclick="viewTopic(${topic.id})">
-                        ${topic.is_pinned ? '<span class="topic-pinned">📌</span>' : ''}
-                        <span class="topic-prefix" style="background: ${prefix.bg_color}; color: ${prefix.color};">${prefix.name}</span>
-                        <span class="topic-title">${topic.title}</span>
-                        <span class="topic-meta">
-                            ${topic.profiles?.username || 'Пользователь'} · 
-                            ${new Date(topic.created_at).toLocaleDateString()}
-                        </span>
-                    </div>
-                `;
-            });
-            
             html += '</div>';
-            document.getElementById('content').innerHTML = html;
+            document.getElementById('forumTopics').innerHTML = html;
         }
 
-        // Просмотр темы
-        async function viewTopic(topicId) {
-            selectedTopic = topicId;
-            
-            // Загружаем тему и сообщения
+        // ПРОСМОТР ТЕМЫ
+        async function viewTopic(id) {
+            currentTopicId = id;
             const { data: topic } = await supabase
                 .from('topics')
-                .select('*, profiles(username, avatar_emoji, roles(*)), prefixes(*)')
-                .eq('id', topicId)
+                .select('*, profiles(username)')
+                .eq('id', id)
                 .single();
             
-            const { data: msgs } = await supabase
+            const { data: posts } = await supabase
                 .from('posts')
-                .select('*, profiles(username, avatar_emoji, roles(*))')
-                .eq('topic_id', topicId)
+                .select('*, profiles(username)')
+                .eq('topic_id', id)
                 .order('created_at');
-            
-            renderTopic(topic, msgs || []);
-        }
 
-        // Отрисовка темы с сообщениями
-        function renderTopic(topic, messages) {
-            let html = `
-                <div class="topics">
-                    <button class="btn btn-secondary" style="width: auto; margin-bottom: 20px;" onclick="loadTopics()">← Назад</button>
-                    <h2 style="color: var(--accent-gold); margin-bottom: 20px;">${topic.title}</h2>
+            let html = '<div style="margin-bottom:15px;"><button class="btn-outline" style="padding:10px 20px;" onclick="loadTopics()">← Назад</button></div>';
+            
+            html += '<div class="topics-list">';
+            html += `
+                <div class="message-item">
+                    <div class="message-header">
+                        <span class="message-author">${topic.profiles?.username}</span>
+                        <span class="message-date">${new Date(topic.created_at).toLocaleString()}</span>
+                    </div>
+                    <div>${topic.content}</div>
+                </div>
             `;
             
-            messages.forEach(msg => {
+            posts?.forEach(p => {
                 html += `
                     <div class="message-item">
                         <div class="message-header">
-                            <span class="message-author">${msg.profiles?.username || 'Пользователь'}</span>
-                            <span class="message-role">${msg.profiles?.roles?.name || 'Пользователь'}</span>
-                            <span class="message-date">${new Date(msg.created_at).toLocaleString()}</span>
+                            <span class="message-author">${p.profiles?.username}</span>
+                            <span class="message-date">${new Date(p.created_at).toLocaleString()}</span>
                         </div>
-                        <div class="message-content">${msg.content}</div>
-                        ${currentUser?.id === msg.author_id ? `
-                            <div class="message-actions">
-                                <button class="action-btn" onclick="editMessage(${msg.id})">✏️ Редактировать</button>
-                                <button class="action-btn danger" onclick="deleteMessage(${msg.id})">🗑️ Удалить</button>
-                            </div>
-                        ` : ''}
+                        <div>${p.content}</div>
                     </div>
                 `;
             });
-            
-            if (currentUser && !topic.is_closed) {
+
+            if (currentUser) {
                 html += `
-                    <div style="margin-top: 30px;">
-                        <h3 style="color: var(--accent-gold); margin-bottom: 15px;">Ответить</h3>
-                        <textarea id="replyContent" rows="3" style="width: 100%; padding: 12px; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-primary); margin-bottom: 15px;"></textarea>
-                        <button class="btn" style="width: auto;" onclick="sendReply(${topic.id})">Отправить</button>
+                    <div style="margin-top:20px;">
+                        <textarea id="replyContent" rows="3" style="width:100%; padding:15px; background:#232323; border:2px solid #2a2a2a; border-radius:15px; color:white;"></textarea>
+                        <button class="btn" style="margin-top:10px;" onclick="sendReply()">Ответить</button>
                     </div>
                 `;
             }
-            
+
             html += '</div>';
-            document.getElementById('content').innerHTML = html;
+            document.getElementById('forumTopics').innerHTML = html;
         }
 
-        // Отправка ответа
-        async function sendReply(topicId) {
+        // ОТВЕТ
+        async function sendReply() {
             const content = document.getElementById('replyContent').value;
-            if (!content) return;
+            if (!content) return showNotif('Введите ответ', 'warning');
             
-            const { error } = await supabase
-                .from('posts')
-                .insert({
-                    topic_id: topicId,
-                    content: content,
-                    author_id: currentUser.id
-                });
+            await supabase.from('posts').insert({
+                topic_id: currentTopicId,
+                content,
+                author_id: currentUser.id
+            });
             
-            if (error) {
-                showNotification('Ошибка отправки', 'danger');
-            } else {
-                showNotification('Ответ отправлен', 'success');
-                viewTopic(topicId);
-            }
+            showNotif('Ответ отправлен', 'success');
+            viewTopic(currentTopicId);
         }
 
-        // Загрузка онлайн пользователей
-        async function loadOnlineUsers() {
-            const fiveMinutesAgo = new Date(Date.now() - 5 * 60 * 1000).toISOString();
+        // НОВАЯ ТЕМА
+        function showNewTopicModal() {
+            if (!currentUser) {
+                showNotif('Сначала войдите', 'warning');
+                return;
+            }
+            document.getElementById('newTopicModal').style.display = 'flex';
+        }
+
+        async function createTopic() {
+            const title = document.getElementById('topicTitle').value;
+            const content = document.getElementById('topicContent').value;
             
-            const { data, error } = await supabase
+            if (!title || !content) return showNotif('Заполните поля', 'warning');
+            
+            await supabase.from('topics').insert({
+                title,
+                content,
+                author_id: currentUser.id
+            });
+            
+            showNotif('Тема создана', 'success');
+            closeModal('newTopicModal');
+            switchSection('forum');
+            loadTopics();
+        }
+
+        // АДМИН-ПАНЕЛЬ
+        async function loadAdminPanel() {
+            const { data: users } = await supabase
                 .from('profiles')
                 .select('*, roles(*)')
-                .gte('last_seen', fiveMinutesAgo);
-            
-            if (error) {
-                showNotification('Ошибка загрузки', 'danger');
-                return;
-            }
-            
-            renderOnlineUsers(data || []);
-        }
-
-        // Отрисовка онлайн пользователей
-        function renderOnlineUsers(users) {
-            let html = `
-                <div class="online-users">
-                    <h3>Сейчас на форуме (${users.length})</h3>
-                    <div class="online-list">
-            `;
-            
-            users.forEach(user => {
-                html += `
-                    <div class="online-user">
-                        <span class="online-emoji">${user.avatar_emoji || '😎'}</span>
-                        <span class="online-name">${user.username}</span>
-                        <span class="online-role">${user.roles?.name || 'Пользователь'}</span>
-                    </div>
-                `;
-            });
-            
-            html += '</div></div>';
-            document.getElementById('content').innerHTML = html;
-        }
-
-        // Загрузка админ-панели
-        async function loadAdminPanel() {
-            const { data: users, error } = await supabase
-                .from('profiles')
-                .select('*, roles(*), user_ips(*)')
                 .order('created_at');
             
-            if (error) {
-                showNotification('Ошибка загрузки', 'danger');
-                return;
-            }
+            let html = '<h3 style="color:#f5cb5c; margin-bottom:15px;">Управление пользователями</h3>';
+            html += '<table><tr><th>Пользователь</th><th>Роль</th><th>Статус</th><th>Действия</th></tr>';
             
-            const { data: roles } = await supabase
-                .from('roles')
-                .select('*');
-            
-            renderAdminPanel(users || [], roles || []);
-        }
-
-        // Отрисовка админ-панели
-        function renderAdminPanel(users, roles) {
-            let html = `
-                <div class="admin-panel">
-                    <h2>Управление пользователями</h2>
-                    <table class="users-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Ник</th>
-                                <th>Email</th>
-                                <th>Роль</th>
-                                <th>IP адреса</th>
-                                <th>Статус</th>
-                                <th>Действия</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-            `;
-            
-            users.forEach(user => {
-                const ips = user.user_ips?.map(ip => ip.ip_address).join(', ') || 'нет';
+            users?.forEach(u => {
                 html += `
                     <tr>
-                        <td>${user.id.slice(0, 8)}...</td>
-                        <td>${user.username} ${user.avatar_emoji}</td>
-                        <td>${user.email || 'нет'}</td>
+                        <td>${u.avatar_emoji} ${u.username}</td>
+                        <td>${u.roles?.name || 'Пользователь'}</td>
+                        <td>${u.status || 'active'}</td>
                         <td>
-                            <span class="role-badge" style="background: ${user.roles?.bg_color || '#2a2a2a'}; color: ${user.roles?.color || '#ffffff'}">
-                                ${user.roles?.name || 'Пользователь'}
-                            </span>
-                        </td>
-                        <td><small>${ips}</small></td>
-                        <td>${user.status || 'active'}</td>
-                        <td>
-                            <button class="action-btn" onclick="changeUserRole('${user.id}')">🔄 Роль</button>
-                            <button class="action-btn" onclick="showModerateModal('${user.id}')">⚖️ Мод</button>
-                            <button class="action-btn danger" onclick="banUser('${user.id}')">🚫 Бан</button>
+                            <button class="admin-btn" onclick="showNotif('Функция в разработке', 'info')">⚖️</button>
                         </td>
                     </tr>
                 `;
             });
             
-            html += `
-                        </tbody>
-                    </table>
-                </div>
-            `;
-            
-            document.getElementById('content').innerHTML = html;
+            html += '</table>';
+            document.getElementById('adminContent').innerHTML = html;
         }
 
-        // Смена роли пользователя
-        async function changeUserRole(userId) {
-            const { data: roles } = await supabase
-                .from('roles')
-                .select('*');
+        // ОБРАЩЕНИЯ
+        function sendAppeal() {
+            const name = document.getElementById('appealName').value;
+            const email = document.getElementById('appealEmail').value;
+            const message = document.getElementById('appealMessage').value;
             
-            // Здесь можно добавить модальное окно выбора роли
-            showNotification('Функция смены роли будет добавлена', 'info');
-        }
-
-        // Показать модалку модерации
-        function showModerateModal(userId) {
-            document.getElementById('moderateUserId').value = userId;
-            document.getElementById('moderateModal').style.display = 'flex';
-        }
-
-        // Применить модерацию
-        async function applyModeration() {
-            const userId = document.getElementById('moderateUserId').value;
-            const action = document.getElementById('moderateAction').value;
-            const reason = document.getElementById('moderateReason').value;
-            const hours = document.getElementById('moderateHours').value;
-            
-            const { error } = await supabase
-                .from('moderation_actions')
-                .insert({
-                    user_id: userId,
-                    action: action,
-                    reason: reason,
-                    expires_at: action === 'mute' ? 
-                        new Date(Date.now() + hours * 60 * 60 * 1000).toISOString() : null,
-                    created_by: currentUser.id
-                });
-            
-            if (error) {
-                showNotification('Ошибка', 'danger');
-            } else {
-                showNotification(`Пользователь ${action === 'ban' ? 'забанен' : action === 'mute' ? 'замучен' : 'получил предупреждение'}`, 'success');
-                closeModal('moderateModal');
-                loadAdminPanel();
-            }
-        }
-
-        // Бан пользователя
-        async function banUser(userId) {
-            if (!confirm('Забанить пользователя?')) return;
-            
-            const { error } = await supabase
-                .from('moderation_actions')
-                .insert({
-                    user_id: userId,
-                    action: 'ban',
-                    reason: 'Нарушение правил',
-                    created_by: currentUser.id
-                });
-            
-            if (error) {
-                showNotification('Ошибка', 'danger');
-            } else {
-                showNotification('Пользователь забанен', 'success');
-                loadAdminPanel();
-            }
-        }
-
-        // Показать окно авторизации
-        function showAuthModal() {
-            document.getElementById('authModal').style.display = 'flex';
-        }
-
-        // Показать окно регистрации
-        function showRegister() {
-            closeModal('authModal');
-            document.getElementById('registerModal').style.display = 'flex';
-        }
-
-        // Регистрация
-        async function register() {
-            const email = document.getElementById('regEmail').value;
-            const password = document.getElementById('regPassword').value;
-            const username = document.getElementById('regUsername').value;
-            const emoji = document.getElementById('regEmoji').value;
-            
-            if (!email || !password || !username) {
-                showNotification('Заполните все поля', 'warning');
+            if (!message) {
+                document.getElementById('appealResult').innerHTML = '❌ Напишите сообщение';
                 return;
             }
             
-            // Регистрация в Supabase Auth
-            const { data: authData, error: authError } = await supabase.auth.signUp({
-                email: email,
-                password: password
-            });
-            
-            if (authError) {
-                showNotification(authError.message, 'danger');
-                return;
-            }
-            
-            // Создание профиля
-            const { error: profileError } = await supabase
-                .from('profiles')
-                .insert({
-                    id: authData.user.id,
-                    username: username,
-                    avatar_emoji: emoji,
-                    role_id: 5 // ID роли "Пользователь"
-                });
-            
-            if (profileError) {
-                showNotification('Ошибка создания профиля', 'danger');
-            } else {
-                showNotification('Регистрация успешна! Подтвердите почту', 'success');
-                closeModal('registerModal');
-            }
+            document.getElementById('appealResult').innerHTML = '✅ Сообщение отправлено!';
+            document.getElementById('appealMessage').value = '';
         }
 
-        // Вход
-        async function login() {
-            const email = document.getElementById('authEmail').value;
-            const password = document.getElementById('authPassword').value;
-            
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
-            
-            if (error) {
-                showNotification(error.message, 'danger');
-            } else {
-                showNotification('Вход выполнен', 'success');
-                closeModal('authModal');
-                checkUser();
-            }
-        }
-
-        // Выход
-        async function logout() {
-            await supabase.auth.signOut();
-            currentUser = null;
-            document.getElementById('authBtn').style.display = 'inline-block';
-            document.getElementById('profileBtn').style.display = 'none';
-            document.getElementById('adminNavBtn').style.display = 'none';
-            showNotification('Вы вышли', 'info');
-            loadCategories();
-        }
-
-        // Показать профиль
+        // ПРОФИЛЬ
         function showProfile() {
             if (!currentUser) return;
             
-            let html = `
+            document.getElementById('forumTopics').innerHTML = `
                 <div class="admin-panel">
-                    <h2>Профиль</h2>
-                    <p><strong>Ник:</strong> ${currentUser.profile?.username}</p>
+                    <h3 style="color:#f5cb5c;">Мой профиль</h3>
+                    <p><strong>Ник:</strong> ${currentUser.profile?.username} ${currentUser.profile?.avatar_emoji}</p>
                     <p><strong>Роль:</strong> ${currentUser.profile?.roles?.name || 'Пользователь'}</p>
                     <p><strong>Email:</strong> ${currentUser.email}</p>
-                    <button class="btn" style="width: auto;" onclick="logout()">Выйти</button>
+                    <button class="btn" style="margin-top:20px;" onclick="logout()">Выйти</button>
                 </div>
             `;
-            
-            document.getElementById('content').innerHTML = html;
+            switchSection('forum');
         }
 
-        // Показать окно новой темы
-        async function showNewTopicModal() {
-            const { data } = await supabase
-                .from('categories')
-                .select('*');
-            
-            const select = document.getElementById('topicCategory');
-            select.innerHTML = '';
-            data.forEach(cat => {
-                select.innerHTML += `<option value="${cat.id}">${cat.name}</option>`;
-            });
-            
-            document.getElementById('newTopicModal').style.display = 'flex';
+        // ВЫХОД
+        async function logout() {
+            await supabase.auth.signOut();
+            currentUser = null;
+            document.getElementById('loginBtn').style.display = 'block';
+            document.getElementById('registerBtn').style.display = 'block';
+            document.getElementById('profileBtn').style.display = 'none';
+            document.getElementById('adminBtn').style.display = 'none';
+            showNotif('Вы вышли', 'info');
+            loadTopics();
         }
 
-        // Создать тему
-        async function createTopic() {
-            const title = document.getElementById('topicTitle').value;
-            const categoryId = document.getElementById('topicCategory').value;
-            const content = document.getElementById('topicContent').value;
-            
-            if (!title || !content) {
-                showNotification('Заполните заголовок и сообщение', 'warning');
-                return;
-            }
-            
-            const { error } = await supabase
-                .from('topics')
-                .insert({
-                    title: title,
-                    content: content,
-                    category_id: categoryId,
-                    author_id: currentUser.id
-                });
-            
-            if (error) {
-                showNotification('Ошибка создания темы', 'danger');
-            } else {
-                showNotification('Тема создана', 'success');
-                closeModal('newTopicModal');
-                loadTopics(categoryId);
-            }
+        // ВСПОМОГАТЕЛЬНЫЕ
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
         }
 
-        // Редактировать сообщение
-        async function editMessage(postId) {
-            // Здесь можно добавить модальное окно редактирования
-            showNotification('Функция редактирования будет добавлена', 'info');
+        function showNotif(msg, type) {
+            const n = document.getElementById('notification');
+            n.innerText = msg;
+            n.style.display = 'block';
+            n.style.borderLeftColor = type === 'danger' ? '#e74c3c' : type === 'warning' ? '#e67e22' : '#f5cb5c';
+            setTimeout(() => n.style.display = 'none', 3000);
         }
-
-        // Удалить сообщение
-        async function deleteMessage(postId) {
-            if (!confirm('Удалить сообщение?')) return;
-            
-            const { error } = await supabase
-                .from('posts')
-                .delete()
-                .eq('id', postId);
-            
-            if (error) {
-                showNotification('Ошибка удаления', 'danger');
-            } else {
-                showNotification('Сообщение удалено', 'success');
-                viewTopic(selectedTopic);
-            }
-        }
-
-        // Закрыть модальное окно
-        function closeModal(modalId) {
-            document.getElementById(modalId).style.display = 'none';
-        }
-
-        // Показать уведомление
-        function showNotification(message, type = 'info') {
-            const notification = document.getElementById('notification');
-            notification.textContent = message;
-            notification.style.display = 'block';
-            notification.style.borderLeftColor = 
-                type === 'success' ? '#27ae60' : 
-                type === 'danger' ? '#e74c3c' : 
-                type === 'warning' ? '#e67e22' : 
-                '#f5cb5c';
-            
-            setTimeout(() => {
-                notification.style.display = 'none';
-            }, 3000);
-        }
-
-        // Обновление last_seen
-        setInterval(async () => {
-            if (currentUser) {
-                await supabase
-                    .from('profiles')
-                    .update({ last_seen: new Date().toISOString() })
-                    .eq('id', currentUser.id);
-            }
-        }, 60000); // Каждую минуту
     </script>
 </body>
-                    </html>
+    </html>
