@@ -1,26 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Luna Axlt Форум</title>
+    <title>Проверка Supabase</title>
     <meta charset="UTF-8">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        body { background: #0a0a0a; color: white; font-family: Arial; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; }
-        .btn { background: #f5cb5c; color: black; padding: 10px 20px; border: none; cursor: pointer; }
-    </style>
 </head>
 <body>
-    <div class="container">
-        <h1 style="color:#f5cb5c;">Luna Axlt Форум</h1>
-        <div id="content"></div>
-    </div>
+    <h1>Проверка связи с базой данных</h1>
+    <div id="status">Проверяю...</div>
+    <button onclick="testConnection()">Проверить соединение</button>
+
     <script>
         const supabase = window.supabase.createClient(
             'https://luna-axlt-forum.supabase.co',
             'sb_publishable_wCEqbtTXXiTq6ThccQe4fA_K-61hi-G'
         );
-        document.getElementById('content').innerHTML = '✅ Подключено к базе данных';
+
+        async function testConnection() {
+            document.getElementById('status').innerText = 'Соединение...';
+            const { data, error } = await supabase
+                .from('topics')
+                .select('count');
+            
+            if (error) {
+                document.getElementById('status').innerText = '❌ Ошибка: ' + error.message;
+                console.error(error);
+            } else {
+                document.getElementById('status').innerText = '✅ Подключение работает!';
+            }
+        }
     </script>
 </body>
 </html>
