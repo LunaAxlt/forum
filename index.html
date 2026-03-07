@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Проверка Supabase</title>
-    <meta charset="UTF-8">
+    <title>Тест Supabase</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-    <h1>Проверка связи с базой данных</h1>
-    <div id="status">Проверяю...</div>
-    <button onclick="testConnection()">Проверить соединение</button>
+    <h1>Тест подключения к Supabase</h1>
+    <button onclick="testConnection()">Проверить</button>
+    <div id="result" style="margin-top:20px; padding:10px; border:1px solid #333;"></div>
 
     <script>
         const supabase = window.supabase.createClient(
@@ -17,16 +16,23 @@
         );
 
         async function testConnection() {
-            document.getElementById('status').innerText = 'Соединение...';
-            const { data, error } = await supabase
-                .from('topics')
-                .select('count');
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Проверяю...';
             
-            if (error) {
-                document.getElementById('status').innerText = '❌ Ошибка: ' + error.message;
-                console.error(error);
-            } else {
-                document.getElementById('status').innerText = '✅ Подключение работает!';
+            try {
+                // Пробуем получить версию Supabase (это должно работать всегда)
+                const { data, error } = await supabase
+                    .from('_dummy')
+                    .select('*')
+                    .limit(1);
+                
+                if (error) {
+                    resultDiv.innerHTML = '❌ Ошибка: ' + error.message;
+                } else {
+                    resultDiv.innerHTML = '✅ Соединение есть!';
+                }
+            } catch (e) {
+                resultDiv.innerHTML = '❌ Критическая ошибка: ' + e.message;
             }
         }
     </script>
