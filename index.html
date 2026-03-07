@@ -1,163 +1,1104 @@
 <!DOCTYPE html>
-<html>
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Тест Supabase</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Luna Axlt — Форум</title>
+    <!-- Подключаем Supabase -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body { font-family: Arial; padding: 20px; background: #0a0a0a; color: white; }
-        .card { background: #1a1a1a; padding: 20px; border-radius: 10px; margin: 10px 0; }
-        button { background: #f5cb5c; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; }
-        input { padding: 10px; margin: 5px; width: 100%; background: #333; border: none; color: white; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            padding: 10px;
+        }
+
+        .container {
+            max-width: 100%;
+            background-color: #121212;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+
+        /* Шапка */
+        .header {
+            background: linear-gradient(145deg, #1e1e1e, #141414);
+            padding: 30px 20px 25px;
+            text-align: center;
+            border-bottom: 2px solid #f5cb5c;
+        }
+
+        .header h1 {
+            color: #f5cb5c;
+            font-size: 2.2rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-shadow: 0 0 15px rgba(245,203,92,0.3);
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #aaa;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* Кнопки авторизации */
+        .auth-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            padding: 15px;
+            background: #1a1a1a;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .btn {
+            background: #f5cb5c;
+            color: #121212;
+            border: none;
+            border-radius: 40px;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            flex: 1;
+            max-width: 150px;
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: #f5cb5c;
+            border: 2px solid #f5cb5c;
+        }
+
+        /* Навигация - горизонтальная прокрутка */
+        .nav-wrapper {
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            background-color: #1a1a1a;
+            border-bottom: 1px solid #2a2a2a;
+            scrollbar-width: none;
+        }
+
+        .nav-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .nav {
+            display: inline-flex;
+            padding: 5px 10px;
+            gap: 5px;
+        }
+
+        .nav button {
+            background: none;
+            border: none;
+            color: #999;
+            font-size: 1rem;
+            font-weight: 600;
+            padding: 14px 20px;
+            border-radius: 40px;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .nav button.active {
+            color: #121212;
+            background-color: #f5cb5c;
+            font-weight: 700;
+        }
+
+        /* Контент */
+        .content {
+            padding: 20px;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        /* Карточка темы */
+        .topic {
+            background-color: #1e1e1e;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid #f5cb5c;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+        }
+
+        .author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 12px;
+            transition: background 0.2s;
+        }
+
+        .author:active {
+            background-color: #2a2a2a;
+        }
+
+        .avatar {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f5cb5c;
+            border: 2px solid #f5cb5c;
+            flex-shrink: 0;
+        }
+
+        .author-info {
+            flex: 1;
+        }
+
+        .name-line {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .verified {
+            background-color: #1e7b4c;
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .role-tag {
+            background-color: #2b2b2b;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            color: #f5cb5c;
+            border: 1px solid #f5cb5c;
+            display: inline-block;
+        }
+
+        .post-meta {
+            color: #777;
+            font-size: 0.85rem;
+        }
+
+        .post-content {
+            color: #ddd;
+            line-height: 1.6;
+            font-size: 1rem;
+            padding-left: 0;
+            margin-top: 10px;
+        }
+
+        .project-list {
+            background-color: #161616;
+            border-radius: 16px;
+            padding: 15px;
+            margin: 15px 0 5px;
+        }
+
+        .project-item {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 0;
+            border-bottom: 1px solid #2a2a2a;
+        }
+
+        .project-item:last-child {
+            border-bottom: none;
+        }
+
+        .status {
+            font-size: 0.85rem;
+            font-weight: 700;
+            padding: 4px 12px;
+            border-radius: 30px;
+            background-color: #1e1e1e;
+        }
+
+        .status.dev {
+            color: #4caf50;
+            border: 1px solid #4caf50;
+        }
+
+        .status.frozen {
+            color: #f44336;
+            border: 1px solid #f44336;
+        }
+
+        .project-name {
+            font-weight: 600;
+            color: white;
+            flex: 1;
+        }
+
+        .project-desc {
+            color: #888;
+            font-size: 0.9rem;
+            width: 100%;
+        }
+
+        /* Список участников */
+        .members {
+            background-color: #1e1e1e;
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .members h3 {
+            color: #f5cb5c;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .member {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #2a2a2a;
+            cursor: pointer;
+        }
+
+        .member:active {
+            background-color: #2a2a2a;
+        }
+
+        .member:last-child {
+            border-bottom: none;
+        }
+
+        .member-avatar {
+            width: 45px;
+            height: 45px;
+            background: #252525;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #f5cb5c;
+            border: 2px solid #f5cb5c;
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .member-role {
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+
+        /* Соцсети */
+        .social-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+        }
+
+        .social-card {
+            background-color: #1e1e1e;
+            border-radius: 20px;
+            padding: 25px 10px;
+            text-align: center;
+            border: 1px solid #2a2a2a;
+        }
+
+        .social-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .social-name {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .social-desc {
+            color: #f5cb5c;
+            font-size: 0.9rem;
+        }
+
+        /* Список тем форума */
+        .topics-list {
+            background-color: #1e1e1e;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .topic-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #2a2a2a;
+            cursor: pointer;
+        }
+
+        .topic-item:hover {
+            background-color: #2a2a2a;
+        }
+
+        .topic-item:last-child {
+            border-bottom: none;
+        }
+
+        .topic-title {
+            color: white;
+            font-weight: 600;
+        }
+
+        .topic-author {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* Сообщения в теме */
+        .message-item {
+            background-color: #1e1e1e;
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .message-author {
+            color: #f5cb5c;
+            font-weight: 600;
+        }
+
+        .message-date {
+            margin-left: auto;
+            color: #888;
+            font-size: 0.85rem;
+        }
+
+        /* Форма обращений */
+        .appeal-form {
+            background-color: #1e1e1e;
+            border-radius: 20px;
+            padding: 25px;
+        }
+
+        .appeal-form input,
+        .appeal-form textarea {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #232323;
+            border: 2px solid #2a2a2a;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .appeal-form textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        /* Админ-панель */
+        .admin-panel {
+            background-color: #1e1e1e;
+            border-radius: 20px;
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .admin-panel table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 600px;
+        }
+
+        .admin-panel th {
+            color: #f5cb5c;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #2a2a2a;
+        }
+
+        .admin-panel td {
+            padding: 12px;
+            border-bottom: 1px solid #2a2a2a;
+            color: #ddd;
+        }
+
+        .admin-btn {
+            background: none;
+            border: 1px solid #2a2a2a;
+            color: #f5cb5c;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+
+        /* Модальные окна */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .modal-card {
+            background: #1e1e1e;
+            border-radius: 32px;
+            padding: 30px 20px;
+            width: 100%;
+            max-width: 400px;
+            border: 2px solid #f5cb5c;
+        }
+
+        .modal-card h3 {
+            color: #f5cb5c;
+            margin-bottom: 20px;
+        }
+
+        .modal-card input,
+        .modal-card textarea,
+        .modal-card select {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            background: #232323;
+            border: 2px solid #2a2a2a;
+            border-radius: 15px;
+            color: white;
+        }
+
+        .modal-close {
+            float: right;
+            font-size: 28px;
+            color: #888;
+            cursor: pointer;
+        }
+
+        /* Уведомления */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #1e1e1e;
+            border-left: 4px solid #f5cb5c;
+            border-radius: 10px;
+            color: white;
+            z-index: 1001;
+            display: none;
+        }
+
+        .footer {
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #2a2a2a;
+        }
     </style>
 </head>
 <body>
-    <h1 style="color:#f5cb5c;">Тест подключения к Supabase</h1>
-    
-    <div class="card">
-        <h3>1. Проверка базы данных</h3>
-        <button onclick="testDB()">Проверить соединение</button>
-        <div id="dbResult"></div>
+    <div class="container">
+        <div class="header">
+            <h1>Luna Axlt</h1>
+            <p>ФОРУМ СООБЩЕСТВА</p>
+        </div>
+
+        <div class="auth-bar">
+            <button class="btn" id="loginBtn" onclick="openAuthModal('login')">Вход</button>
+            <button class="btn-outline" id="registerBtn" onclick="openAuthModal('register')">Регистрация</button>
+            <button class="btn-outline" id="profileBtn" style="display:none;" onclick="showProfile()">Профиль</button>
+        </div>
+
+        <div class="nav-wrapper">
+            <div class="nav" id="nav">
+                <button class="active" onclick="switchSection('projects')">📁 Проекты</button>
+                <button onclick="switchSection('news')">📢 Новости</button>
+                <button onclick="switchSection('faq')">❓ FAQ</button>
+                <button onclick="switchSection('workshop')">🔧 Мастерская</button>
+                <button onclick="switchSection('social')">🌐 Соцсети</button>
+                <button onclick="switchSection('appeals')">📬 Обращения</button>
+                <button onclick="switchSection('forum')">💬 Форум</button>
+                <button id="adminBtn" style="display:none;" onclick="switchSection('admin')">⚙️ Админка</button>
+            </div>
+        </div>
+
+        <div class="content" id="content">
+            <!-- ПРОЕКТЫ (статичные) -->
+            <div id="projectsSection" class="section active">
+                <div class="topic">
+                    <div class="author" onclick='showPopup("Linar", ["Команда разработки"], "—")'>
+                        <div class="avatar">L</div>
+                        <div class="author-info">
+                            <div class="name-line">
+                                <span class="name">Linar</span>
+                                <span class="verified">✓</span>
+                                <span class="role-tag">Команда разработки</span>
+                            </div>
+                            <div class="post-meta">Тема: Проекты студии</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <div class="project-list">
+                            <div class="project-item">
+                                <span class="status frozen">❄️ ЗАМОРОЖЕНО</span>
+                                <span class="project-name">Ryam World</span>
+                                <span class="project-desc">Основной проект</span>
+                            </div>
+                            <div class="project-item">
+                                <span class="status dev">⚡ В РАЗРАБОТКЕ</span>
+                                <span class="project-name">Quest Messenger</span>
+                                <span class="project-desc">совместно с GamesDeloPointAI</span>
+                            </div>
+                            <div class="project-item">
+                                <span class="status frozen">❄️ ЗАМОРОЖЕНО</span>
+                                <span class="project-name">3D Хоррор</span>
+                                <span class="project-desc">(без названия)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="members">
+                    <h3>👥 Участники</h3>
+                    <div class="member" onclick='showPopup("Axtl", ["Владелец"], "—")'>
+                        <div class="member-avatar">A</div>
+                        <div class="member-info">
+                            <div class="member-name">Axtl <span class="verified">✓</span></div>
+                            <div class="member-role">Владелец</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Linar", ["Команда разработки"], "—")'>
+                        <div class="member-avatar">L</div>
+                        <div class="member-info">
+                            <div class="member-name">Linar <span class="verified">✓</span></div>
+                            <div class="member-role">Команда разработки</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Dark Forge", ["Служба безопасности", "Официальный аккаунт"], "@DarkForgeOfficial")'>
+                        <div class="member-avatar">D</div>
+                        <div class="member-info">
+                            <div class="member-name">Dark Forge <span class="verified">✓</span></div>
+                            <div class="member-role">Служба безопасности</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Egor", ["Команда Проекта"], "—")'>
+                        <div class="member-avatar">E</div>
+                        <div class="member-info">
+                            <div class="member-name">Egor <span class="verified">✓</span></div>
+                            <div class="member-role">Команда Проекта</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Kirill_Mod", ["Модератор", "Редактор"], "—")'>
+                        <div class="member-avatar">K</div>
+                        <div class="member-info">
+                            <div class="member-name">Kirill_Mod</div>
+                            <div class="member-role">Модератор, Редактор</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Maks_Virn", ["Участник"], "—")'>
+                        <div class="member-avatar">M</div>
+                        <div class="member-info">
+                            <div class="member-name">Maks_Virn</div>
+                            <div class="member-role">Участник</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Ulas_Ya", ["Участник"], "—")'>
+                        <div class="member-avatar">U</div>
+                        <div class="member-info">
+                            <div class="member-name">Ulas_Ya</div>
+                            <div class="member-role">Участник</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Time_Mit", ["Участник"], "—")'>
+                        <div class="member-avatar">T</div>
+                        <div class="member-info">
+                            <div class="member-name">Time_Mit</div>
+                            <div class="member-role">Участник</div>
+                        </div>
+                    </div>
+                    <div class="member" onclick='showPopup("Alyona Kind", ["Пользователь"], "—")'>
+                        <div class="member-avatar">A</div>
+                        <div class="member-info">
+                            <div class="member-name">Alyona Kind</div>
+                            <div class="member-role">Пользователь</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- НОВОСТИ (статичные) -->
+            <div id="newsSection" class="section">
+                <div class="topic">
+                    <div class="author" onclick='showPopup("Linar", ["Команда разработки"], "—")'>
+                        <div class="avatar">L</div>
+                        <div class="author-info">
+                            <div class="name-line">
+                                <span class="name">Linar</span>
+                                <span class="verified">✓</span>
+                                <span class="role-tag">Команда разработки</span>
+                            </div>
+                            <div class="post-meta">Тема: Важное объявление</div>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p><b>Дорогие друзья!</b> Проект Ryam World временно заморожен.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ (статичный) -->
+            <div id="faqSection" class="section">
+                <div class="topic">
+                    <div class="author" onclick='showPopup("Egor", ["Команда Проекта"], "—")'>
+                        <div class="avatar">E</div>
+                        <div class="author-info">
+                            <div class="name-line">
+                                <span class="name">Egor</span>
+                                <span class="verified">✓</span>
+                                <span class="role-tag">Команда Проекта</span>
+                            </div>
+                            <div class="post-meta">Информация</div>
+                        </div>
+                    </div>
+                    <div class="post-content">Раздел заполняется</div>
+                </div>
+            </div>
+
+            <!-- МАСТЕРСКАЯ (статичная) -->
+            <div id="workshopSection" class="section">
+                <div class="topic">
+                    <div class="author" onclick='showPopup("Dark Forge", ["Служба безопасности", "Официальный аккаунт"], "@DarkForgeOfficial")'>
+                        <div class="avatar">D</div>
+                        <div class="author-info">
+                            <div class="name-line">
+                                <span class="name">Dark Forge</span>
+                                <span class="verified">✓</span>
+                                <span class="role-tag">Служба безопасности</span>
+                            </div>
+                            <div class="post-meta">Мастерская</div>
+                        </div>
+                    </div>
+                    <div class="post-content">Технические обсуждения</div>
+                </div>
+            </div>
+
+            <!-- СОЦСЕТИ (статика) -->
+            <div id="socialSection" class="section">
+                <div class="social-grid">
+                    <div class="social-card">
+                        <span class="social-icon">📱</span>
+                        <div class="social-name">Telegram</div>
+                        <div class="social-desc">@darkforge_of</div>
+                    </div>
+                    <div class="social-card">
+                        <span class="social-icon">📘</span>
+                        <div class="social-name">ВКонтакте</div>
+                        <div class="social-desc">Потом будет</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ОБРАЩЕНИЯ (рабочая форма) -->
+            <div id="appealsSection" class="section">
+                <div class="appeal-form">
+                    <h3 style="color:#f5cb5c;">📬 Оставить обращение</h3>
+                    <input type="text" id="appealName" placeholder="Ваше имя">
+                    <input type="email" id="appealEmail" placeholder="Email для ответа">
+                    <textarea id="appealText" placeholder="Опишите проблему..."></textarea>
+                    <button class="btn" onclick="sendAppeal()">Отправить</button>
+                    <div id="appealResult" style="text-align:center; margin-top:15px;"></div>
+                </div>
+            </div>
+
+            <!-- ФОРУМ (динамический) -->
+            <div id="forumSection" class="section">
+                <div style="margin-bottom:15px;">
+                    <button class="btn" style="width:100%;" onclick="showNewTopicModal()">➕ Новая тема</button>
+                </div>
+                <div id="forumTopics" class="topics-list"></div>
+            </div>
+
+            <!-- АДМИНКА -->
+            <div id="adminSection" class="section">
+                <div class="admin-panel" id="adminPanel"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            Luna Axlt Studios · 2026
+        </div>
     </div>
 
-    <div class="card">
-        <h3>2. Регистрация</h3>
-        <input type="email" id="regEmail" placeholder="Email">
-        <input type="password" id="regPass" placeholder="Пароль">
-        <input type="text" id="regName" placeholder="Никнейм">
-        <button onclick="testRegister()">Зарегистрироваться</button>
-        <div id="regResult"></div>
+    <!-- МОДАЛЬНОЕ ОКНО АВТОРИЗАЦИИ -->
+    <div class="modal" id="authModal">
+        <div class="modal-card">
+            <span class="modal-close" onclick="closeModal('authModal')">&times;</span>
+            <h3 id="authTitle">Вход</h3>
+            <input type="email" id="authEmail" placeholder="Email">
+            <input type="password" id="authPass" placeholder="Пароль">
+            <div id="registerFields" style="display:none;">
+                <input type="text" id="authUsername" placeholder="Никнейм">
+                <select id="authEmoji">
+                    <option value="😎">😎 Крутой</option>
+                    <option value="🦊">🦊 Лис</option>
+                    <option value="🐉">🐉 Дракон</option>
+                    <option value="👻">👻 Призрак</option>
+                    <option value="🤖">🤖 Робот</option>
+                </select>
+            </div>
+            <button class="btn" id="authActionBtn" onclick="handleAuth()">Войти</button>
+            <p style="text-align:center; margin-top:15px;">
+                <a href="#" onclick="toggleAuthMode()" style="color:#f5cb5c;" id="authToggle">Нет аккаунта? Зарегистрироваться</a>
+            </p>
+        </div>
     </div>
 
-    <div class="card">
-        <h3>3. Вход</h3>
-        <input type="email" id="loginEmail" placeholder="Email">
-        <input type="password" id="loginPass" placeholder="Пароль">
-        <button onclick="testLogin()">Войти</button>
-        <div id="loginResult"></div>
-        <div id="userInfo" style="margin-top:10px; color:#f5cb5c;"></div>
+    <!-- МОДАЛЬНОЕ ОКНО НОВОЙ ТЕМЫ -->
+    <div class="modal" id="newTopicModal">
+        <div class="modal-card">
+            <span class="modal-close" onclick="closeModal('newTopicModal')">&times;</span>
+            <h3>Новая тема</h3>
+            <input type="text" id="topicTitle" placeholder="Заголовок">
+            <textarea id="topicContent" rows="4" placeholder="Текст сообщения..."></textarea>
+            <button class="btn" onclick="createTopic()">Создать тему</button>
+        </div>
     </div>
 
-    <div class="card">
-        <h3>4. Создать тестовую тему</h3>
-        <input type="text" id="topicTitle" placeholder="Название темы">
-        <textarea id="topicContent" rows="3" placeholder="Текст темы" style="width:100%; padding:10px; background:#333; color:white; border:none;"></textarea>
-        <button onclick="createTestTopic()">Создать тему</button>
-        <div id="topicResult"></div>
+    <!-- МОДАЛЬНОЕ ОКНО ОТВЕТА -->
+    <div class="modal" id="replyModal">
+        <div class="modal-card">
+            <span class="modal-close" onclick="closeModal('replyModal')">&times;</span>
+            <h3>Ответить</h3>
+            <textarea id="replyContent" rows="4" placeholder="Ваш ответ..."></textarea>
+            <button class="btn" onclick="sendReply()">Отправить</button>
+        </div>
     </div>
 
-    <div class="card">
-        <h3>5. Последние темы</h3>
-        <button onclick="loadTopics()">Показать темы</button>
-        <div id="topicsList"></div>
-    </div>
+    <!-- УВЕДОМЛЕНИЯ -->
+    <div class="notification" id="notification"></div>
 
     <script>
-        // Подключаемся к Supabase
+        // ===== SUPABASE =====
         const supabase = window.supabase.createClient(
             'https://luna-axlt-forum.supabase.co',
             'sb_publishable_wCEqbtTXXiTq6ThccQe4fA_K-61hi-G'
         );
 
-        // 1. Проверка БД
-        async function testDB() {
-            const { data, error } = await supabase.from('topics').select('count').limit(1);
-            document.getElementById('dbResult').innerHTML = error 
-                ? '❌ Ошибка: ' + error.message 
-                : '✅ База данных работает!';
-        }
+        let currentUser = null;
+        let isLoginMode = true;
+        let currentTopicId = null;
 
-        // 2. Регистрация
-        async function testRegister() {
-            const email = document.getElementById('regEmail').value;
-            const pass = document.getElementById('regPass').value;
-            const name = document.getElementById('regName').value;
+        // ===== ПРОВЕРКА ПОЛЬЗОВАТЕЛЯ =====
+        checkUser();
+        loadTopics();
 
-            const { data, error } = await supabase.auth.signUp({
-                email: email,
-                password: pass
-            });
-
-            if (error) {
-                document.getElementById('regResult').innerHTML = '❌ ' + error.message;
-                return;
+        async function checkUser() {
+            const { data } = await supabase.auth.getUser();
+            if (data.user) {
+                const { data: profile } = await supabase
+                    .from('profiles')
+                    .select('*, roles(*)')
+                    .eq('id', data.user.id)
+                    .single();
+                
+                if (profile) {
+                    currentUser = { ...data.user, profile };
+                    document.getElementById('loginBtn').style.display = 'none';
+                    document.getElementById('registerBtn').style.display = 'none';
+                    document.getElementById('profileBtn').style.display = 'block';
+                    
+                    if (profile.roles?.name === 'Команда форума') {
+                        document.getElementById('adminBtn').style.display = 'inline-block';
+                    }
+                }
             }
-
-            // Создаем профиль
-            await supabase.from('profiles').insert({
-                id: data.user.id,
-                username: name,
-                avatar_emoji: '😎',
-                role_id: 5
-            });
-
-            document.getElementById('regResult').innerHTML = '✅ Регистрация успешна! Проверь почту.';
         }
 
-        // 3. Вход
-        async function testLogin() {
-            const email = document.getElementById('loginEmail').value;
-            const pass = document.getElementById('loginPass').value;
-
-            const { data, error } = await supabase.auth.signInWithPassword({
-                email: email,
-                password: pass
-            });
-
-            if (error) {
-                document.getElementById('loginResult').innerHTML = '❌ ' + error.message;
-                return;
-            }
-
-            document.getElementById('loginResult').innerHTML = '✅ Вход выполнен!';
-            document.getElementById('userInfo').innerHTML = 'Пользователь: ' + data.user.email;
-        }
-
-        // 4. Создать тему
-        async function createTestTopic() {
-            const title = document.getElementById('topicTitle').value;
-            const content = document.getElementById('topicContent').value;
-
-            const { data: { user } } = await supabase.auth.getUser();
+        // ===== ПЕРЕКЛЮЧЕНИЕ РАЗДЕЛОВ =====
+        function switchSection(section) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(section + 'Section').classList.add('active');
             
-            if (!user) {
-                document.getElementById('topicResult').innerHTML = '❌ Сначала войди';
-                return;
-            }
+            document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
 
-            const { error } = await supabase.from('topics').insert({
-                title: title,
-                content: content,
-                author_id: user.id
-            });
-
-            document.getElementById('topicResult').innerHTML = error ? '❌ ' + error.message : '✅ Тема создана!';
+            if (section === 'forum') loadTopics();
+            if (section === 'admin') loadAdminPanel();
         }
 
-        // 5. Показать темы
+        // ===== АВТОРИЗАЦИЯ =====
+        function openAuthModal(mode) {
+            isLoginMode = mode === 'login';
+            document.getElementById('authTitle').innerText = isLoginMode ? 'Вход' : 'Регистрация';
+            document.getElementById('authActionBtn').innerText = isLoginMode ? 'Войти' : 'Зарегистрироваться';
+            document.getElementById('registerFields').style.display = isLoginMode ? 'none' : 'block';
+            document.getElementById('authModal').style.display = 'flex';
+        }
+
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            document.getElementById('authTitle').innerText = isLoginMode ? 'Вход' : 'Регистрация';
+            document.getElementById('authActionBtn').innerText = isLoginMode ? 'Войти' : 'Зарегистрироваться';
+            document.getElementById('registerFields').style.display = isLoginMode ? 'none' : 'block';
+        }
+
+        async function handleAuth() {
+            const email = document.getElementById('authEmail').value;
+            const pass = document.getElementById('authPass').value;
+
+            if (isLoginMode) {
+                const { error } = await supabase.auth.signInWithPassword({ email, password: pass });
+                if (error) return showNotif(error.message, 'danger');
+                showNotif('Добро пожаловать!', 'success');
+            } else {
+                const username = document.getElementById('authUsername').value;
+                const emoji = document.getElementById('authEmoji').value;
+                
+                const { data, error } = await supabase.auth.signUp({ email, password: pass });
+                if (error) return showNotif(error.message, 'danger');
+
+                await supabase.from('profiles').insert({
+                    id: data.user.id,
+                    username,
+                    avatar_emoji: emoji,
+                    role_id: 5
+                });
+                showNotif('Регистрация успешна!', 'success');
+            }
+            closeModal('authModal');
+            checkUser();
+        }
+
+        // ===== ТЕМЫ ФОРУМА =====
         async function loadTopics() {
-            const { data, error } = await supabase
+            const { data } = await supabase
                 .from('topics')
                 .select('*, profiles(username)')
                 .order('created_at', { ascending: false });
 
-            if (error) {
-                document.getElementById('topicsList').innerHTML = '❌ ' + error.message;
-                return;
+            let html = '<div class="topics-list">';
+            if (data?.length === 0) {
+                html += '<p style="text-align:center; padding:30px;">Пока нет тем</p>';
+            } else {
+                data?.forEach(t => {
+                    html += `
+                        <div class="topic-item" onclick="viewTopic(${t.id})">
+                            <span class="topic-title">${t.title}</span>
+                            <span class="topic-author">${t.profiles?.username || 'User'}</span>
+                        </div>
+                    `;
+                });
             }
+            html += '</div>';
+            document.getElementById('forumTopics').innerHTML = html;
+        }
 
-            let html = '';
-            data.forEach(t => {
+        async function viewTopic(id) {
+            currentTopicId = id;
+            const { data: topic } = await supabase
+                .from('topics')
+                .select('*, profiles(username)')
+                .eq('id', id)
+                .single();
+            
+            const { data: posts } = await supabase
+                .from('posts')
+                .select('*, profiles(username)')
+                .eq('topic_id', id)
+                .order('created_at');
+
+            let html = '<div style="margin-bottom:15px;"><button class="btn-outline" onclick="loadTopics()">← Назад</button></div>';
+            html += '<div class="topics-list">';
+            html += `
+                <div class="message-item">
+                    <div class="message-header">
+                        <span class="message-author">${topic.profiles?.username}</span>
+                        <span class="message-date">${new Date(topic.created_at).toLocaleString()}</span>
+                    </div>
+                    <div>${topic.content}</div>
+                </div>
+            `;
+            posts?.forEach(p => {
                 html += `
-                    <div style="background:#333; padding:10px; margin:5px; border-radius:5px;">
-                        <b>${t.title}</b><br>
-                        ${t.content}<br>
-                        <small>Автор: ${t.profiles?.username || 'User'} | ${new Date(t.created_at).toLocaleString()}</small>
+                    <div class="message-item">
+                        <div class="message-header">
+                            <span class="message-author">${p.profiles?.username}</span>
+                            <span class="message-date">${new Date(p.created_at).toLocaleString()}</span>
+                        </div>
+                        <div>${p.content}</div>
                     </div>
                 `;
             });
-            document.getElementById('topicsList').innerHTML = html;
+            if (currentUser) {
+                html += `
+                    <div style="margin-top:20px;">
+                        <textarea id="replyContent" rows="3" style="width:100%; padding:15px; background:#232323; border:2px solid #2a2a2a; border-radius:15px; color:white;"></textarea>
+                        <button class="btn" style="margin-top:10px;" onclick="sendReply()">Ответить</button>
+                    </div>
+                `;
+            }
+            html += '</div>';
+            document.getElementById('forumTopics').innerHTML = html;
+        }
+
+        async function sendReply() {
+            const content = document.getElementById('replyContent').value;
+            if (!content) return showNotif('Введите ответ', 'warning');
+            await supabase.from('posts').insert({
+                topic_id: currentTopicId,
+                content,
+                author_id: currentUser.id
+            });
+            showNotif('Ответ отправлен', 'success');
+            viewTopic(currentTopicId);
+        }
+
+        function showNewTopicModal() {
+            if (!currentUser) return showNotif('Сначала войдите', 'warning');
+            document.getElementById('newTopicModal').style.display = 'flex';
+        }
+
+        async function createTopic() {
+            const title = document.getElementById('topicTitle').value;
+            const content = document.getElementById('topicContent').value;
+            if (!title || !content) return showNotif('Заполните поля', 'warning');
+            await supabase.from('topics').insert({
+                title, content, author_id: currentUser.id
+            });
+            showNotif('Тема создана', 'success');
+            closeModal('newTopicModal');
+            loadTopics();
+        }
+
+        // ===== ОБРАЩЕНИЯ =====
+        function sendAppeal() {
+            const name = document.getElementById('appealName').value;
+            const email = document.getElementById('appealEmail').value;
+            const text = document.getElementById('appealText').value;
+            if (!text) {
+                document.getElementById('appealResult').innerHTML = '❌ Напишите сообщение';
+                return;
+            }
+            document.getElementById('appealResult').innerHTML = '✅ Отправлено! Мы ответим вам.';
+            document.getElementById('appealText').value = '';
+        }
+
+        // ===== АДМИНКА =====
+        async function loadAdminPanel() {
+            const { data: users } = await supabase
+                .from('profiles')
+                .select('*, roles(*)')
+                .order('created_at');
+            
+            let html = '<h3 style="color:#f5cb5c;">Управление пользователями</h3><table><tr><th>Пользователь</th><th>Роль</th></tr>';
+            users?.forEach(u => {
+                html += `<tr><td>${u.avatar_emoji} ${u.username}</td><td>${u.roles?.name || 'Пользователь'}</td></tr>`;
+            });
+            html += '</table>';
+            document.getElementById('adminPanel').innerHTML = html;
+        }
+
+        // ===== ПОПАП СТАТИЧЕСКИХ ПОЛЬЗОВАТЕЛЕЙ =====
+        function showPopup(name, roles, contact) {
+            document.getElementById('popupAvatar').innerText = name.charAt(0);
+            document.getElementById('popupName').innerText = name;
+            let rolesHtml = '';
+            roles.forEach(r => rolesHtml += `<div class="popup-role-item">${r}</div>`);
+            document.getElementById('popupRoles').innerHTML = rolesHtml;
+            document.getElementById('popupContact').innerText = contact ? `Связь: ${contact}` : 'Связь: —';
+            document.getElementById('popupOverlay').style.display = 'flex';
+        }
+
+        function closePopup() {
+            document.getElementById('popupOverlay').style.display = 'none';
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = 'none';
+        }
+
+        function showNotif(msg, type) {
+            const n = document.getElementById('notification');
+            n.innerText = msg;
+            n.style.display = 'block';
+            n.style.borderLeftColor = type === 'danger' ? '#e74c3c' : '#f5cb5c';
+            setTimeout(() => n.style.display = 'none', 3000);
         }
     </script>
+
+    <!-- ПОПАП ДЛЯ СТАТИЧЕСКИХ ПОЛЬЗОВАТЕЛЕЙ (оставил как было) -->
+    <div class="popup-overlay" id="popupOverlay" onclick="closePopup()">
+        <div class="popup-card" onclick="event.stopPropagation()">
+            <div class="popup-close" onclick="closePopup()">×</div>
+            <div id="popupAvatar" class="popup-avatar"></div>
+            <div id="popupName" class="popup-name"></div>
+            <div class="popup-roles" id="popupRoles"></div>
+            <div class="popup-contact" id="popupContact">Связь: —</div>
+        </div>
+    </div>
 </body>
-</html>
+                        </html>
