@@ -1281,7 +1281,7 @@
         <span>Чат форума</span>
     </div>
     
-    <div class="chat-messages" id="chatMessages"></div>
+    <div class="chat-messages" id="bottomChatMessages"></div>   <!-- ID изменён -->
     
     <div class="chat-input-area">
         <input type="text" class="chat-input" id="chatInput" placeholder="Имя: сообщение">
@@ -1297,7 +1297,7 @@
             const response = await fetch(SCRIPT_URL + '?t=' + Date.now());
             const messages = await response.json();
             
-            const container = document.getElementById('chatMessages');
+            const container = document.getElementById('bottomChatMessages');   // исправлено
             container.innerHTML = '';
             
             messages.forEach(msg => {
