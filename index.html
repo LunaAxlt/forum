@@ -6,6 +6,7 @@
     <title>Luna Axlt · Форум</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* ===== БАЗОВЫЕ СТИЛИ ===== */
         * {
             margin: 0;
             padding: 0;
@@ -25,42 +26,7 @@
             margin: 0 auto;
         }
 
-        /* Уведомления */
-        .notification-bar {
-            padding: 15px 20px;
-            border-radius: 16px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            color: #fff;
-            font-size: 1rem;
-        }
-        .notification-bar i { 
-            font-size: 28px; 
-            min-width: 40px;
-            text-align: center;
-        }
-        .notification-bar.tech {
-            background: rgba(220, 20, 20, 0.2);
-            border: 2px solid #dc143c;
-        }
-        .notification-bar.admin {
-            background: rgba(255, 165, 0, 0.2);
-            border: 2px solid #ffa500;
-        }
-        .notification-bar .close-btn {
-            margin-left: auto;
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 24px;
-            cursor: pointer;
-            opacity: 0.7;
-            min-width: 40px;
-            text-align: center;
-        }
-
+        /* ===== УВЕДОМЛЕНИЕ О РЕЖИМЕ ЧТЕНИЯ ===== */
         .reading-notice {
             background: rgba(155, 89, 182, 0.15);
             border: 2px solid #9b59b6;
@@ -81,8 +47,11 @@
             cursor: pointer;
             opacity: 0.7;
         }
+        .reading-notice button:hover {
+            opacity: 1;
+        }
 
-        /* Шапка */
+        /* ===== ШАПКА ===== */
         .header {
             background: linear-gradient(145deg, #1a1f2e, #0f1219);
             border-radius: 24px;
@@ -105,7 +74,7 @@
             opacity: 0.8;
         }
 
-        /* Приветствие */
+        /* ===== ПРИВЕТСТВИЕ ===== */
         .welcome {
             background: rgba(155, 89, 182, 0.1);
             border: 2px dashed #9b59b6;
@@ -124,7 +93,7 @@
             font-size: 1rem;
         }
 
-        /* Карточки разделов */
+        /* ===== СЕТКА РАЗДЕЛОВ ===== */
         .sections-grid {
             display: flex;
             flex-direction: column;
@@ -154,7 +123,7 @@
             line-height: 1.4;
         }
 
-        /* Контент раздела */
+        /* ===== КОНТЕНТ РАЗДЕЛА ===== */
         .content-area {
             background: #1a1a1a;
             border-radius: 24px;
@@ -175,7 +144,49 @@
             text-align: center;
         }
 
-        /* Карточка темы */
+        /* ===== ТЕМЫ ===== */
+        .topics-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .topic-preview {
+            background: #1e1e1e;
+            border-radius: 20px;
+            padding: 20px;
+            border-left: 5px solid #9b59b6;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .topic-preview:active {
+            background: #2a2a2a;
+        }
+        .topic-preview-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .topic-prefix {
+            background: #ff4d4d;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: white;
+            border: 1px solid #ff4d4d;
+            box-shadow: 0 0 8px #ff4d4d;
+        }
+        .topic-preview-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+        .topic-preview-meta {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
         .topic-card {
             background: #1e1e1e;
             border-radius: 20px;
@@ -204,8 +215,8 @@
         }
         .name-line {
             display: flex;
-            align-items: center;
             flex-wrap: wrap;
+            align-items: center;
             gap: 8px;
         }
         .name {
@@ -224,20 +235,47 @@
             justify-content: center;
             font-size: 11px;
         }
+        /* ===== РОЛИ В СТИЛЕ GTA ===== */
         .role-tag {
-            background-color: #2b2b2b;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #2b2b2b;
             padding: 4px 12px;
             border-radius: 30px;
             font-size: 0.8rem;
-            color: #9b59b6;
-            border: 1px solid #9b59b6;
+            font-weight: 600;
+            border: 1px solid;
         }
+        .role-tag i {
+            font-size: 0.9rem;
+        }
+        .role-admin {
+            color: #ff4d4d;
+            border-color: #ff4d4d;
+        }
+        .role-dev {
+            color: #4d88ff;
+            border-color: #4d88ff;
+        }
+        .role-security {
+            color: #4CAF50;
+            border-color: #4CAF50;
+        }
+        .role-moderator {
+            color: #4d88ff; /* синий */
+            border-color: #4d88ff;
+        }
+        .role-default {
+            color: #aaa;
+            border-color: #aaa;
+        }
+
         .post-meta {
             color: #777;
             font-size: 0.8rem;
             margin-top: 4px;
         }
-
         .project-list {
             background-color: #161616;
             border-radius: 16px;
@@ -261,7 +299,7 @@
         .status.frozen { color: #f44336; border: 1px solid #f44336; }
         .project-name { font-weight: 600; color: white; flex: 1; font-size: 1rem; }
 
-        /* Список участников */
+        /* ===== УЧАСТНИКИ ===== */
         .members-list {
             background-color: #1e1e1e;
             border-radius: 20px;
@@ -292,9 +330,7 @@
             border: 2px solid #9b59b6;
             flex-shrink: 0;
         }
-        .member-info {
-            flex: 1;
-        }
+        .member-info { flex: 1; }
         .member-name { 
             font-size: 1.2rem; 
             font-weight: 600; 
@@ -303,9 +339,14 @@
             align-items: center; 
             gap: 5px; 
         }
-        .member-role { color: #aaa; font-size: 0.9rem; }
+        .member-role { 
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 4px;
+        }
 
-        /* Соцсети */
+        /* ===== СОЦСЕТИ ===== */
         .social-grid {
             display: flex;
             flex-direction: column;
@@ -322,7 +363,7 @@
         .social-name { color: white; font-weight: 700; font-size: 1.2rem; margin-bottom: 5px; }
         .social-desc { color: #9b59b6; font-size: 0.95rem; word-break: break-word; }
 
-        /* Обращения */
+        /* ===== ОБРАЩЕНИЯ ===== */
         .appeal-block {
             background-color: #1e1e1e;
             border-radius: 24px;
@@ -334,7 +375,7 @@
         .appeal-contacts { margin-top: 20px; color: #9b59b6; font-size: 1rem; }
         .appeal-contacts p { margin: 8px 0; }
 
-        /* Попап */
+        /* ===== ПОПАП ДЛЯ ПОЛЬЗОВАТЕЛЕЙ ===== */
         .popup-overlay {
             display: none;
             position: fixed;
@@ -392,11 +433,15 @@
             margin-bottom: 15px;
         }
         .popup-role-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             color: #9b59b6;
             font-weight: 500;
             padding: 8px 0;
             border-bottom: 1px solid #2a2a2a;
             text-align: center;
+            justify-content: center;
         }
         .popup-role-item:last-child { border-bottom: none; }
         .popup-contact {
@@ -405,6 +450,7 @@
             font-size: 1rem;
         }
 
+        /* ===== ФУТЕР ===== */
         .footer {
             padding: 20px;
             text-align: center;
@@ -413,16 +459,84 @@
             margin-top: 40px;
             font-size: 0.9rem;
         }
+
+        /* ===== ПОЛНОЭКРАННЫЕ ЗАГЛУШКИ ===== */
+        .fullscreen-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+        .fullscreen-card {
+            background: #1e1e1e;
+            border-radius: 48px;
+            padding: 40px 30px;
+            max-width: 500px;
+            width: 100%;
+            border: 3px solid #9b59b6;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(155, 89, 182, 0.5);
+            animation: fadeIn 0.3s;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        .fullscreen-card h2 {
+            font-size: 3rem;
+            color: #9b59b6;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px #9b59b6;
+        }
+        .fullscreen-card p {
+            color: #ccc;
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+        .fullscreen-card .social-link {
+            display: inline-block;
+            background: #2a2a2a;
+            color: #9b59b6;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            border: 2px solid #9b59b6;
+            margin-top: 15px;
+            transition: 0.2s;
+        }
+        .fullscreen-card .social-link:hover {
+            background: #9b59b6;
+            color: #121212;
+        }
     </style>
 </head>
 <body>
-    <div id="notificationContainer"></div>
+    <!-- ⚙️ НАСТРОЙКА РЕЖИМА РАБОТЫ ФОРУМА -->
+    <!-- 0 = форум работает, 1 = техперерыв, 2 = отключён администрацией -->
+    <div id="forumMode" style="display: none;">0</div>
+
+    <!-- КОНТЕЙНЕР ДЛЯ ПОЛНОЭКРАННОЙ ЗАГЛУШКИ -->
+    <div id="fullscreenOverlay" class="fullscreen-overlay">
+        <div id="fullscreenCard" class="fullscreen-card">
+            <!-- Содержимое подставляется через JS -->
+        </div>
+    </div>
 
     <div id="mainContent" class="container">
-        <!-- Уведомление о режиме чтения -->
+        <!-- УВЕДОМЛЕНИЕ О РЕЖИМЕ ЧТЕНИЯ (можно закрыть) -->
         <div id="readingNotice" class="reading-notice">
             <span><i class="fas fa-info-circle"></i> Форум доступен только в режиме чтения!</span>
-            <button onclick="this.parentElement.style.display='none'">✕</button>
+            <button onclick="document.getElementById('readingNotice').style.display='none'">✕</button>
         </div>
 
         <!-- ШАПКА -->
@@ -455,6 +569,10 @@
                 <h3>🔧 Мастерская</h3>
                 <p>Технические обсуждения и разработка</p>
             </div>
+            <div class="section-card" onclick="loadSection('security')">
+                <h3>🔒 Безопасность</h3>
+                <p>Как защитить себя и свои аккаунты</p>
+            </div>
             <div class="section-card" onclick="loadSection('social')">
                 <h3>🌐 Соцсети</h3>
                 <p>Мы в Telegram, VK и других сетях</p>
@@ -473,11 +591,11 @@
             </div>
         </div>
 
-        <!-- КОНТЕНТ -->
+        <!-- КОНТЕНТ РАЗДЕЛА -->
         <div id="contentArea" class="content-area" style="display: none;"></div>
     </div>
 
-    <!-- ПОПАП -->
+    <!-- ПОПАП ДЛЯ ПОЛЬЗОВАТЕЛЕЙ -->
     <div id="popupOverlay" class="popup-overlay" onclick="closePopup()">
         <div class="popup-card" onclick="event.stopPropagation()">
             <div class="popup-close" onclick="closePopup()">×</div>
@@ -493,49 +611,49 @@
     </footer>
 
     <script>
-        // ⚙️ НАСТРОЙКА УВЕДОМЛЕНИЙ
-        // 0 - нет уведомлений
-        // 1 - технический перерыв
-        // 2 - форум отключён администрацией
-        const mode = 2;
+        // ===== НАСТРОЙКА РЕЖИМА РАБОТЫ =====
+        const mode = 0; // ⬅️ МЕНЯЙ ЗДЕСЬ
+
+        const overlay = document.getElementById('fullscreenOverlay');
+        const card = document.getElementById('fullscreenCard');
+        const mainContent = document.getElementById('mainContent');
 
         if (mode === 1 || mode === 2) {
-            const container = document.getElementById('notificationContainer');
-            let icon = '';
+            overlay.style.display = 'flex';
+            mainContent.style.opacity = '0.3';
+            mainContent.style.pointerEvents = 'none';
+            
             let title = '';
-            let bgClass = '';
-
+            let message = '';
+            let telegramLink = 'https://t.me/LunaAxltStudiosGames';
+            
             if (mode === 1) {
-                icon = '<i class="fas fa-tools"></i>';
                 title = '🔧 Технический перерыв';
-                bgClass = 'tech';
+                message = 'Ведутся технические работы. Скоро всё заработает!';
             } else if (mode === 2) {
-                icon = '<i class="fas fa-ban"></i>';
-                title = '⛔ Форум отключён администрацией';
-                bgClass = 'admin';
+                title = '⛔ Форум отключён';
+                message = 'Форум временно отключён администрацией.';
             }
-
-            container.innerHTML = `
-                <div class="container">
-                    <div class="notification-bar ${bgClass}">
-                        ${icon}
-                        <div style="flex:1;">${title}</div>
-                        <span class="close-btn" onclick="this.parentElement.remove()">✕</span>
-                    </div>
-                </div>
+            
+            card.innerHTML = `
+                <h2>${title}</h2>
+                <p>${message}</p>
+                <p style="font-size: 1.1rem; color: #888;">Вся информация в нашем Telegram канале:</p>
+                <a href="${telegramLink}" class="social-link" target="_blank">📱 Перейти в Telegram</a>
             `;
         }
 
+        // ===== ДАННЫЕ ПОЛЬЗОВАТЕЛЕЙ =====
         const usersData = {
-            'Axtl': { roles: ['Владелец'], contact: '@LunaAxlt' },
-            'Linar': { roles: ['Команда разработки'], contact: '—' },
-            'Dark Forge': { roles: ['Служба безопасности', 'Официальный аккаунт'], contact: '@LunaAxlt' },
-            'Egor': { roles: ['Команда Проекта'], contact: '—' },
-            'Kirill_Mod': { roles: ['Модератор', 'Редактор'], contact: '—' },
-            'Maks_Virn': { roles: ['Участник'], contact: '—' },
-            'Ulas_Ya': { roles: ['Участник'], contact: '—' },
-            'Time_Mit': { roles: ['Участник'], contact: '—' },
-            'Alyona Kind': { roles: ['Пользователь'], contact: '—' }
+            'Axtl': { roles: ['Владелец'], roleClass: 'role-admin', roleIcon: '👑', contact: '@LunaAxlt' },
+            'Linar': { roles: ['Команда разработки', 'Официальный аккаунт', 'Служба безопасности'], contact: '—' },
+            'LunaAxlt': { roles: ['Служба безопасности', 'Официальный аккаунт'], roleClass: 'role-security', roleIcon: '🔫', contact: '@LunaAxlt' },
+            'Orange': { roles: ['Команда Проекта'], roleClass: 'role-moderator', roleIcon: '🛠️', contact: '—' },
+            'Kirill_Mod': { roles: ['Модератор', 'Редактор'], roleClass: 'role-moderator', roleIcon: '🛡️', contact: '—' },
+            'Maks_Virn': { roles: ['Участник'], roleClass: 'role-default', roleIcon: '👤', contact: '—' },
+            'Ulas_Ya': { roles: ['Участник'], roleClass: 'role-default', roleIcon: '👤', contact: '—' },
+            'Time_Mit': { roles: ['Участник'], roleClass: 'role-default', roleIcon: '👤', contact: '—' },
+            'Alyona Kind': { roles: ['Пользователь'], roleClass: 'role-default', roleIcon: '👤', contact: '—' }
         };
 
         window.showPopup = function(name) {
@@ -547,7 +665,7 @@
 
             let rolesHtml = '';
             user.roles.forEach(role => {
-                rolesHtml += `<div class="popup-role-item">${role}</div>`;
+                rolesHtml += `<div class="popup-role-item"><i class="fas fa-shield-alt"></i> ${role}</div>`;
             });
             document.getElementById('popupRoles').innerHTML = rolesHtml;
 
@@ -559,6 +677,7 @@
             document.getElementById('popupOverlay').style.display = 'none';
         };
 
+        // ===== ФУНКЦИИ ЗАГРУЗКИ РАЗДЕЛОВ =====
         function loadSection(section) {
             const sectionsDiv = document.getElementById('sectionsContainer');
             const contentDiv = document.getElementById('contentArea');
@@ -576,7 +695,7 @@
                                 <div class="name-line">
                                     <span class="name">Linar</span>
                                     <span class="verified">✓</span>
-                                    <span class="role-tag">Команда разработки</span>
+                                    <span class="role-tag role-dev"><i class="fas fa-code"></i> Команда разработки</span>
                                 </div>
                                 <div class="post-meta">Тема: Проекты студии</div>
                             </div>
@@ -606,7 +725,7 @@
                                 <div class="name-line">
                                     <span class="name">Linar</span>
                                     <span class="verified">✓</span>
-                                    <span class="role-tag">Команда разработки</span>
+                                    <span class="role-tag role-dev"><i class="fas fa-code"></i> Команда разработки</span>
                                 </div>
                                 <div class="post-meta">Тема: Важное объявление</div>
                             </div>
@@ -618,12 +737,12 @@
                 html += `
                     <div class="topic-card">
                         <div class="author">
-                            <div class="avatar">E</div>
+                            <div class="avatar">O</div>
                             <div>
                                 <div class="name-line">
-                                    <span class="name">Egor</span>
+                                    <span class="name">Orange</span>
                                     <span class="verified">✓</span>
-                                    <span class="role-tag">Команда Проекта</span>
+                                    <span class="role-tag role-moderator"><i class="fas fa-tools"></i> Команда Проекта</span>
                                 </div>
                                 <div class="post-meta">Тема: Информация</div>
                             </div>
@@ -635,17 +754,38 @@
                 html += `
                     <div class="topic-card">
                         <div class="author">
-                            <div class="avatar">D</div>
+                            <div class="avatar">L</div>
                             <div>
                                 <div class="name-line">
-                                    <span class="name">Dark Forge</span>
+                                    <span class="name">LunaAxlt</span>
                                     <span class="verified">✓</span>
-                                    <span class="role-tag">Служба безопасности</span>
+                                    <span class="role-tag role-security"><i class="fas fa-shield-alt"></i> Служба безопасности</span>
                                 </div>
                                 <div class="post-meta">Тема: Мастерская</div>
                             </div>
                         </div>
-                        <p>Технические обсуждения</p>
+                        <p>Технические обсуждения и разработка</p>
+                    </div>
+                `;
+            } else if (section === 'security') {
+                // Показываем список тем с яркими префиксами
+                html += `
+                    <h2 style="color:#9b59b6; margin-bottom:20px; font-size:1.8rem;">🔒 Безопасность</h2>
+                    <div class="topics-list">
+                        <div class="topic-preview" onclick="loadSecurityTopic('scam')">
+                            <div class="topic-preview-header">
+                                <span class="topic-prefix">❗ Важно</span>
+                                <span class="topic-preview-title">Как не попасть в руки мошенникам</span>
+                            </div>
+                            <div class="topic-preview-meta">Автор: Linar · 3 роли</div>
+                        </div>
+                        <div class="topic-preview" onclick="loadSecurityTopic('social')">
+                            <div class="topic-preview-header">
+                                <span class="topic-prefix">❗ Важно</span>
+                                <span class="topic-preview-title">Как защитить свои Соцсети</span>
+                            </div>
+                            <div class="topic-preview-meta">Автор: Linar · 3 роли</div>
+                        </div>
                     </div>
                 `;
             } else if (section === 'social') {
@@ -672,15 +812,15 @@
                                 <div class="name-line">
                                     <span class="name">Axtl</span>
                                     <span class="verified">✓</span>
-                                    <span class="role-tag">Владелец</span>
+                                    <span class="role-tag role-admin"><i class="fas fa-crown"></i> Владелец</span>
                                 </div>
                                 <div class="post-meta">Тема: Контакты</div>
                             </div>
                         </div>
                         <div style="margin-top:15px;">
                             <p><strong>Официальный аккаунт:</strong> @LunaAxlt</p>
-                            <p><strong>Менеджер:</strong> @DarkForgeManger</p>
-                            <p><strong>Техподдержка:</strong> @supDarkForgebot</p>
+                            <p><strong>Менеджер:</strong> @LunaAxltofficial</p>
+                            <p><strong>Техподдержка:</strong> @LunaAxltsupportbot</p>
                         </div>
                     </div>
                 `;
@@ -690,8 +830,8 @@
                         <h2>500</h2>
                         <p>Обратитесь в службу поддержки или к менеджеру</p>
                         <div class="appeal-contacts">
-                            <p>Менеджер: @DarkForgeManger</p>
-                            <p>Техподдержка: @supDarkForgebot</p>
+                            <p>Менеджер: @LunaAxltofficial</p>
+                            <p>Техподдержка: @LunaAxltsupportbot</p>
                         </div>
                     </div>
                 `;
@@ -703,63 +843,82 @@
                             <div class="member-avatar">A</div>
                             <div class="member-info">
                                 <div class="member-name">Axtl <span class="verified">✓</span></div>
-                                <div class="member-role">Владелец</div>
+                                <div class="member-role">
+                                    <span class="role-tag role-admin"><i class="fas fa-crown"></i> Владелец</span>
+                                </div>
                             </div>
                         </div>
                         <div class="member-item" onclick="showPopup('Linar')">
                             <div class="member-avatar">L</div>
                             <div class="member-info">
                                 <div class="member-name">Linar <span class="verified">✓</span></div>
-                                <div class="member-role">Команда разработки</div>
+                                <div class="member-role">
+                                    <span class="role-tag role-dev"><i class="fas fa-code"></i> Разработка</span>
+                                    <span class="role-tag role-security"><i class="fas fa-shield-alt"></i> СБ</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="member-item" onclick="showPopup('Dark Forge')">
-                            <div class="member-avatar">D</div>
+                        <div class="member-item" onclick="showPopup('LunaAxlt')">
+                            <div class="member-avatar">L</div>
                             <div class="member-info">
-                                <div class="member-name">Dark Forge <span class="verified">✓</span></div>
-                                <div class="member-role">Служба безопасности</div>
+                                <div class="member-name">LunaAxlt <span class="verified">✓</span></div>
+                                <div class="member-role">
+                                    <span class="role-tag role-security"><i class="fas fa-shield-alt"></i> СБ</span>
+                                </div>
                             </div>
                         </div>
-                        <div class="member-item" onclick="showPopup('Egor')">
-                            <div class="member-avatar">E</div>
+                        <div class="member-item" onclick="showPopup('Orange')">
+                            <div class="member-avatar">O</div>
                             <div class="member-info">
-                                <div class="member-name">Egor <span class="verified">✓</span></div>
-                                <div class="member-role">Команда Проекта</div>
+                                <div class="member-name">Orange <span class="verified">✓</span></div>
+                                <div class="member-role">
+                                    <span class="role-tag role-moderator"><i class="fas fa-tools"></i> Проект</span>
+                                </div>
                             </div>
                         </div>
                         <div class="member-item" onclick="showPopup('Kirill_Mod')">
                             <div class="member-avatar">K</div>
                             <div class="member-info">
                                 <div class="member-name">Kirill_Mod</div>
-                                <div class="member-role">Модератор, Редактор</div>
+                                <div class="member-role">
+                                    <span class="role-tag role-moderator"><i class="fas fa-gavel"></i> Модератор</span>
+                                </div>
                             </div>
                         </div>
                         <div class="member-item" onclick="showPopup('Maks_Virn')">
                             <div class="member-avatar">M</div>
                             <div class="member-info">
                                 <div class="member-name">Maks_Virn</div>
-                                <div class="member-role">Участник</div>
+                                <div class="member-role">
+                                    <span class="role-tag role-default"><i class="fas fa-user"></i> Участник</span>
+                                </div>
                             </div>
                         </div>
                         <div class="member-item" onclick="showPopup('Ulas_Ya')">
                             <div class="member-avatar">U</div>
                             <div class="member-info">
                                 <div class="member-name">Ulas_Ya</div>
-                                <div class="member-role">Участник</div>
+                                <div class="member-role">
+                                    <span class="role-tag role-default"><i class="fas fa-user"></i> Участник</span>
+                                </div>
                             </div>
                         </div>
                         <div class="member-item" onclick="showPopup('Time_Mit')">
                             <div class="member-avatar">T</div>
                             <div class="member-info">
                                 <div class="member-name">Time_Mit</div>
-                                <div class="member-role">Участник</div>
+                                <div class="member-role">
+                                    <span class="role-tag role-default"><i class="fas fa-user"></i> Участник</span>
+                                </div>
                             </div>
                         </div>
                         <div class="member-item" onclick="showPopup('Alyona Kind')">
                             <div class="member-avatar">A</div>
                             <div class="member-info">
                                 <div class="member-name">Alyona Kind</div>
-                                <div class="member-role">Пользователь</div>
+                                <div class="member-role">
+                                    <span class="role-tag role-default"><i class="fas fa-user"></i> Пользователь</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -769,10 +928,83 @@
             contentDiv.innerHTML = html;
         }
 
+        // Функция для загрузки конкретной темы безопасности
+        window.loadSecurityTopic = function(topic) {
+            const sectionsDiv = document.getElementById('sectionsContainer');
+            const contentDiv = document.getElementById('contentArea');
+            sectionsDiv.style.display = 'none';
+            contentDiv.style.display = 'block';
+
+            let html = `<div class="back-button" onclick="loadSection('security')">← К списку тем</div>`;
+
+            if (topic === 'scam') {
+                html += `
+                    <div class="topic-card">
+                        <div class="author">
+                            <div class="avatar">L</div>
+                            <div>
+                                <div class="name-line">
+                                    <span class="name">Linar</span>
+                                    <span class="verified">✓</span>
+                                    <span class="role-tag role-dev"><i class="fas fa-code"></i> Команда разработки</span>
+                                    <span class="role-tag role-security"><i class="fas fa-shield-alt"></i> Служба безопасности</span>
+                                </div>
+                                <div class="post-meta">Тема: Как не попасть в руки мошенникам</div>
+                            </div>
+                        </div>
+                        <div style="color:#ddd; line-height:1.6; margin-top:15px;">
+                            <p>👋 Ребята, всех приветствую! Это будет не обычный пост, а ликбез по безопасности. Тема больная, но важная: как не попасться на крючок мошенников, особенно если вы состоите в тематических чатах игр или студий.</p>
+                            <p>Мошенники следят за популярными проектами. Чем активнее комьюнити, тем больше рыбы они ловят на удочку. Давайте разбираться, как не стать уловом. 🚫🎣</p>
+                            <p>⚠️ <strong>Как обманывают в сфере разработки игр (и около нее)</strong></p>
+                            <p>Если вы общаетесь с представителями студий (или теми, кто выдает себя за них), запомните несколько правил:</p>
+                            <p>1. <strong>Проверяй того, с кем говоришь.</strong> Мошенники часто создают аккаунты-клоны (копируют аватарку, имя, ник) администраторов, известных разработчиков или старых игроков. Прежде чем перевести деньги или отдать доступ к почте проверь никнейм до буквы! Сравни дату регистрации аккаунта.</p>
+                            <p>2. <strong>Фишинговые сайты-двойники.</strong> Убедись, что ты заходишь на официальный сайт студии или проекта. Проверяй ссылку (URL) в адресной строке. Одна лишняя буква в домене и твои логин/пароль уже у злоумышленников.</p>
+                            <p>Будете в безопасности! Не переводите никому деньги! Наши игры бесплатные и доступны всем 🤗</p>
+                            <p><em>Будет дополняться</em></p>
+                        </div>
+                    </div>
+                `;
+            } else if (topic === 'social') {
+                html += `
+                    <div class="topic-card">
+                        <div class="author">
+                            <div class="avatar">L</div>
+                            <div>
+                                <div class="name-line">
+                                    <span class="name">Linar</span>
+                                    <span class="verified">✓</span>
+                                    <span class="role-tag role-dev"><i class="fas fa-code"></i> Команда разработки</span>
+                                    <span class="role-tag role-security"><i class="fas fa-shield-alt"></i> Служба безопасности</span>
+                                </div>
+                                <div class="post-meta">Тема: Как защитить свои Соцсети</div>
+                            </div>
+                        </div>
+                        <div style="color:#ddd; line-height:1.6; margin-top:15px;">
+                            <p>Как защитить свои соцсети (ВК, Telegram, и другие) от взлома</p>
+                            <p>Даже если ты не поведешься на удочку мошенников, твой аккаунт могут попытаться взломать технически или методом «социальной инженерии». Вот твой базовый «скилл сетап» для выживания.</p>
+                            <p>· <strong>Двухфакторка (2FA) — твой щит.</strong> Обязательно включи двухфакторную аутентификацию везде, где это возможно: ВКонтакте, Telegram, Discord, почта. Используй не СМС (их могут перехватить), а специальные приложения типа Google Authenticator. Это как второй замок на двери.</p>
+                            <p>· <strong>Пароли: хватит использовать «qwerty»!</strong> Пароль от игрового форума и пароль от почты должны быть разными. Используй менеджеры паролей, чтобы хранить сложные связки (например, G7$kL9#pR2). Если один сайт взломают, злоумышленники не зайдут на другой.</p>
+                            <p style="color:#f5cb5c;">(ВНИМАНИЕ ❗ ПРИ УСТАНОВКЕ ПАРОЛЕЙ ОБЯЗАТЕЛЬНО ЗАПОЛНИТЕ ИХ ‼️ ЧТО БЫ НЕ ПОТЕРЯТЬ ДОСТУП К АККАУНТАМ)</p>
+                            <p>· <strong>Не ведись на «бесплатный сыр».</strong> Вам пишет «админ» и просит проголосовать за проект, перейдя по ссылке? Или друг скинул файл «прикол.exe»? Стоп. Это фишинг. Всегда проверяйте подозрительные ссылки и не скачивайте файлы от незнакомцев. Даже если пишет друг — позвони ему и уточни, он ли это. (Даже если это он, не спишите переходить ссылке, он может специально вас взломать)</p>
+                            <p>🚩 <strong>Признаки, что тебя уже взломали (или пытаются)</strong></p>
+                            <p>Как понять, что пора бить тревогу?</p>
+                            <p>· Выкидывает из аккаунта. Вас внезапно разлогинило, а пароль перестал подходить.<br>· Спам-атака. Вам на телефон приходят кучи СМС с кодами подтверждения, которых вы не запрашивали. Кто-то пытается подобрать код.<br>· Странная активность. В истории входов (есть в настройках безопасности VK и Google) вы видите входы из других городов или стран.</p>
+                            <p>Если заметили такое не паникуйте, а действуйте:</p>
+                            <p>1. Жмите «Выйти со всех устройств».<br>2. Меняйте пароль (на самый сложный, который есть в менеджере).<br>3. Проверяйте привязанные номера и почты в настройках (не подвязал ли кто свой телефон).</p>
+                            <p>Безопасность - это не паранойя, это ответственность. Потратьте 10 минут на настройку защиты сегодня, чтобы не потерять свои скины, достижения и деньги завтра.</p>
+                            <p>Будете в Безопасности! Пост будет дополняться</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            contentDiv.innerHTML = html;
+        };
+
         function backToSections() {
             document.getElementById('sectionsContainer').style.display = 'flex';
             document.getElementById('contentArea').style.display = 'none';
         }
     </script>
 </body>
-</html>
+    </html>
