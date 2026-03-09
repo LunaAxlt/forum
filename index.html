@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>Luna Axlt · Форум</title>
+    <title>Luna Axlt — Форум</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         /* ===== БАЗОВЫЕ СТИЛИ ===== */
@@ -22,33 +22,8 @@
             padding: 10px;
         }
         .container {
-            max-width: 100%;
+            max-width: 1200px;
             margin: 0 auto;
-        }
-
-        /* ===== УВЕДОМЛЕНИЕ О РЕЖИМЕ ЧТЕНИЯ ===== */
-        .reading-notice {
-            background: rgba(155, 89, 182, 0.15);
-            border: 2px solid #9b59b6;
-            border-radius: 16px;
-            padding: 15px 20px;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: #fff;
-            font-size: 1rem;
-        }
-        .reading-notice button {
-            background: none;
-            border: none;
-            color: #fff;
-            font-size: 24px;
-            cursor: pointer;
-            opacity: 0.7;
-        }
-        .reading-notice button:hover {
-            opacity: 1;
         }
 
         /* ===== ШАПКА ===== */
@@ -59,6 +34,7 @@
             margin-bottom: 25px;
             border: 2px solid #9b59b6;
             text-align: center;
+            position: relative;
         }
         .header h1 {
             color: #9b59b6;
@@ -67,11 +43,38 @@
             text-transform: uppercase;
             letter-spacing: 2px;
             margin-bottom: 8px;
+            text-shadow: 0 0 15px #9b59b6;
         }
         .header p {
             color: #fff;
             font-size: 1rem;
             opacity: 0.8;
+        }
+        .auth-buttons {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        .btn {
+            background: #9b59b6;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 2px solid #9b59b6;
+            color: #9b59b6;
+        }
+        .btn:hover {
+            transform: scale(1.05);
         }
 
         /* ===== ПРИВЕТСТВИЕ ===== */
@@ -107,10 +110,12 @@
             border-left: 5px solid #9b59b6;
             cursor: pointer;
             transition: 0.2s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.6);
         }
-        .section-card:active {
+        .section-card:hover {
             background: #2a2a2a;
-            transform: scale(0.98);
+            transform: translateY(-2px);
+            border-left-color: #b07cc6;
         }
         .section-card h3 {
             color: #9b59b6;
@@ -120,62 +125,42 @@
         .section-card p {
             color: #aaa;
             font-size: 0.95rem;
-            line-height: 1.4;
         }
 
-        /* ===== КОНТЕНТ РАЗДЕЛА ===== */
-        .content-area {
-            background: #1a1a1a;
-            border-radius: 24px;
-            padding: 20px;
-            border: 1px solid #2a2a2a;
-        }
-        .back-button {
-            display: inline-block;
-            background: #9b59b6;
-            color: white;
-            padding: 14px 25px;
-            border-radius: 40px;
-            margin-bottom: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-            width: 100%;
-            text-align: center;
-        }
-
-        /* ===== ТЕМЫ ===== */
+        /* ===== ТЕМЫ И СООБЩЕНИЯ ===== */
         .topics-list {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .topic-preview {
             background: #1e1e1e;
             border-radius: 20px;
             padding: 20px;
-            border-left: 5px solid #9b59b6;
+        }
+        .topic-preview {
+            background: #252525;
+            border-radius: 16px;
+            padding: 18px;
+            margin-bottom: 12px;
             cursor: pointer;
+            border-left: 4px solid #9b59b6;
             transition: 0.2s;
         }
-        .topic-preview:active {
+        .topic-preview:hover {
             background: #2a2a2a;
+            transform: translateX(5px);
         }
         .topic-preview-header {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             margin-bottom: 8px;
+            flex-wrap: wrap;
         }
         .topic-prefix {
             background: #ff4d4d;
+            color: white;
             padding: 4px 12px;
             border-radius: 30px;
             font-size: 0.8rem;
             font-weight: 700;
-            color: white;
-            border: 1px solid #ff4d4d;
-            box-shadow: 0 0 8px #ff4d4d;
+            box-shadow: 0 0 10px #ff4d4d;
         }
         .topic-preview-title {
             font-size: 1.2rem;
@@ -183,22 +168,21 @@
             color: white;
         }
         .topic-preview-meta {
-            color: #888;
+            color: #9b59b6;
             font-size: 0.9rem;
         }
-
         .topic-card {
             background: #1e1e1e;
             border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
             border-left: 5px solid #9b59b6;
         }
         .author {
             display: flex;
             align-items: center;
             gap: 15px;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
         .avatar {
             width: 50px;
@@ -211,13 +195,12 @@
             font-size: 1.5rem;
             color: #9b59b6;
             border: 2px solid #9b59b6;
-            flex-shrink: 0;
         }
         .name-line {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         .name {
             font-size: 1.2rem;
@@ -235,7 +218,6 @@
             justify-content: center;
             font-size: 11px;
         }
-        /* ===== РОЛИ В СТИЛЕ GTA ===== */
         .role-tag {
             display: inline-flex;
             align-items: center;
@@ -246,9 +228,6 @@
             font-size: 0.8rem;
             font-weight: 600;
             border: 1px solid;
-        }
-        .role-tag i {
-            font-size: 0.9rem;
         }
         .role-admin {
             color: #ff4d4d;
@@ -263,47 +242,49 @@
             border-color: #4CAF50;
         }
         .role-moderator {
-            color: #4d88ff; /* синий */
-            border-color: #4d88ff;
+            color: #ffaa33;
+            border-color: #ffaa33;
         }
-        .role-default {
-            color: #aaa;
-            border-color: #aaa;
-        }
-
         .post-meta {
-            color: #777;
-            font-size: 0.8rem;
+            color: #888;
+            font-size: 0.85rem;
             margin-top: 4px;
         }
-        .project-list {
-            background-color: #161616;
+        .post-content {
+            color: #ddd;
+            line-height: 1.6;
+            margin-left: 65px;
+        }
+        .reply-form {
+            margin-left: 65px;
+            margin-top: 20px;
+        }
+        .reply-form textarea {
+            width: 100%;
+            background: #252525;
+            border: 2px solid #2a2a2a;
             border-radius: 16px;
-            padding: 15px;
+            padding: 12px;
+            color: white;
+            font-size: 1rem;
+            resize: vertical;
+            margin-bottom: 10px;
         }
-        .project-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 0;
-            border-bottom: 1px solid #2a2a2a;
+        .reply-form button {
+            background: #9b59b6;
+            border: none;
+            border-radius: 40px;
+            padding: 12px 25px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
         }
-        .project-item:last-child { border-bottom: none; }
-        .status {
-            font-size: 0.8rem;
-            font-weight: 700;
-            padding: 4px 10px;
-            border-radius: 30px;
-        }
-        .status.dev { color: #4caf50; border: 1px solid #4caf50; }
-        .status.frozen { color: #f44336; border: 1px solid #f44336; }
-        .project-name { font-weight: 600; color: white; flex: 1; font-size: 1rem; }
 
         /* ===== УЧАСТНИКИ ===== */
         .members-list {
-            background-color: #1e1e1e;
+            background: #1e1e1e;
             border-radius: 20px;
-            padding: 15px;
+            padding: 20px;
         }
         .member-item {
             display: flex;
@@ -312,9 +293,6 @@
             padding: 15px 0;
             border-bottom: 1px solid #2a2a2a;
             cursor: pointer;
-        }
-        .member-item:active {
-            background-color: #2a2a2a;
         }
         .member-item:last-child { border-bottom: none; }
         .member-avatar {
@@ -328,21 +306,20 @@
             font-size: 1.3rem;
             color: #9b59b6;
             border: 2px solid #9b59b6;
-            flex-shrink: 0;
         }
         .member-info { flex: 1; }
-        .member-name { 
-            font-size: 1.2rem; 
-            font-weight: 600; 
-            color: white; 
-            display: flex; 
-            align-items: center; 
-            gap: 5px; 
+        .member-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 5px;
         }
-        .member-role { 
+        .member-role {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
+            gap: 8px;
             margin-top: 4px;
         }
 
@@ -353,36 +330,21 @@
             gap: 15px;
         }
         .social-card {
-            background-color: #1e1e1e;
+            background: #1e1e1e;
             border-radius: 20px;
-            padding: 25px 15px;
+            padding: 25px;
             text-align: center;
             border: 1px solid #2a2a2a;
         }
-        .social-icon { font-size: 2.5rem; margin-bottom: 10px; }
-        .social-name { color: white; font-weight: 700; font-size: 1.2rem; margin-bottom: 5px; }
-        .social-desc { color: #9b59b6; font-size: 0.95rem; word-break: break-word; }
+        .social-icon { font-size: 2.5rem; margin-bottom: 10px; color: #9b59b6; }
+        .social-name { color: white; font-weight: 600; font-size: 1.2rem; margin-bottom: 5px; }
+        .social-desc { color: #9b59b6; }
 
-        /* ===== ОБРАЩЕНИЯ ===== */
-        .appeal-block {
-            background-color: #1e1e1e;
-            border-radius: 24px;
-            padding: 30px 20px;
-            text-align: center;
-            border: 2px solid #f44336;
-        }
-        .appeal-block h2 { font-size: 2.5rem; color: #f44336; margin-bottom: 15px; }
-        .appeal-contacts { margin-top: 20px; color: #9b59b6; font-size: 1rem; }
-        .appeal-contacts p { margin: 8px 0; }
-
-        /* ===== ПОПАП ДЛЯ ПОЛЬЗОВАТЕЛЕЙ ===== */
+        /* ===== ПОПАП ===== */
         .popup-overlay {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.95);
             z-index: 1000;
             justify-content: center;
@@ -393,15 +355,12 @@
             background: #1e1e1e;
             border-radius: 32px;
             padding: 30px 20px;
-            width: 100%;
             max-width: 350px;
+            width: 100%;
             border: 2px solid #9b59b6;
-            position: relative;
         }
         .popup-close {
-            position: absolute;
-            top: 15px;
-            right: 20px;
+            text-align: right;
             font-size: 28px;
             color: #888;
             cursor: pointer;
@@ -409,13 +368,13 @@
         .popup-avatar {
             width: 80px;
             height: 80px;
-            background: linear-gradient(145deg, #2a2a2a, #1a1a1a);
+            background: #252525;
             border-radius: 50%;
             margin: 0 auto 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2.5rem;
+            font-size: 2rem;
             color: #9b59b6;
             border: 3px solid #9b59b6;
         }
@@ -423,7 +382,6 @@
             font-size: 1.8rem;
             text-align: center;
             color: #9b59b6;
-            font-weight: 700;
             margin-bottom: 20px;
         }
         .popup-roles {
@@ -433,116 +391,90 @@
             margin-bottom: 15px;
         }
         .popup-role-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #9b59b6;
-            font-weight: 500;
             padding: 8px 0;
             border-bottom: 1px solid #2a2a2a;
             text-align: center;
-            justify-content: center;
+            color: #9b59b6;
         }
-        .popup-role-item:last-child { border-bottom: none; }
         .popup-contact {
             text-align: center;
             color: #888;
-            font-size: 1rem;
         }
 
-        /* ===== ФУТЕР ===== */
         .footer {
-            padding: 20px;
+            padding: 30px;
             text-align: center;
             color: #666;
             border-top: 1px solid #2a2a2a;
-            margin-top: 40px;
-            font-size: 0.9rem;
+            margin-top: 50px;
         }
 
-        /* ===== ПОЛНОЭКРАННЫЕ ЗАГЛУШКИ ===== */
-        .fullscreen-overlay {
+        /* ===== МОДАЛЬНЫЕ ОКНА ===== */
+        .modal {
             display: none;
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95);
             z-index: 2000;
             justify-content: center;
             align-items: center;
             padding: 20px;
-            backdrop-filter: blur(10px);
         }
-        .fullscreen-card {
+        .modal-card {
             background: #1e1e1e;
-            border-radius: 48px;
-            padding: 40px 30px;
-            max-width: 500px;
+            border-radius: 30px;
+            padding: 30px;
+            max-width: 400px;
             width: 100%;
-            border: 3px solid #9b59b6;
-            text-align: center;
-            box-shadow: 0 0 50px rgba(155, 89, 182, 0.5);
-            animation: fadeIn 0.3s;
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-        .fullscreen-card h2 {
-            font-size: 3rem;
-            color: #9b59b6;
-            margin-bottom: 20px;
-            text-shadow: 0 0 15px #9b59b6;
-        }
-        .fullscreen-card p {
-            color: #ccc;
-            font-size: 1.3rem;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-        .fullscreen-card .social-link {
-            display: inline-block;
-            background: #2a2a2a;
-            color: #9b59b6;
-            padding: 15px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-size: 1.2rem;
             border: 2px solid #9b59b6;
-            margin-top: 15px;
-            transition: 0.2s;
         }
-        .fullscreen-card .social-link:hover {
+        .modal-card h3 {
+            color: #9b59b6;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        .modal-card input {
+            width: 100%;
+            background: #252525;
+            border: 2px solid #2a2a2a;
+            border-radius: 40px;
+            padding: 15px 20px;
+            margin-bottom: 15px;
+            color: white;
+            font-size: 1rem;
+        }
+        .modal-card button {
             background: #9b59b6;
-            color: #121212;
+            border: none;
+            border-radius: 40px;
+            padding: 15px;
+            color: white;
+            font-weight: 600;
+            width: 100%;
+            cursor: pointer;
+            margin-bottom: 10px;
+        }
+        .modal-card .switch-btn {
+            background: transparent;
+            border: 2px solid #9b59b6;
+            color: #9b59b6;
         }
     </style>
 </head>
 <body>
-    <!-- ⚙️ НАСТРОЙКА РЕЖИМА РАБОТЫ ФОРУМА -->
-    <!-- 0 = форум работает, 1 = техперерыв, 2 = отключён администрацией -->
-    <div id="forumMode" style="display: none;">0</div>
-
-    <!-- КОНТЕЙНЕР ДЛЯ ПОЛНОЭКРАННОЙ ЗАГЛУШКИ -->
-    <div id="fullscreenOverlay" class="fullscreen-overlay">
-        <div id="fullscreenCard" class="fullscreen-card">
-            <!-- Содержимое подставляется через JS -->
-        </div>
-    </div>
-
-    <div id="mainContent" class="container">
-        <!-- УВЕДОМЛЕНИЕ О РЕЖИМЕ ЧТЕНИЯ (можно закрыть) -->
-        <div id="readingNotice" class="reading-notice">
-            <span><i class="fas fa-info-circle"></i> Форум доступен только в режиме чтения!</span>
-            <button onclick="document.getElementById('readingNotice').style.display='none'">✕</button>
-        </div>
-
+    <div class="container">
         <!-- ШАПКА -->
         <div class="header">
             <h1>LUNA AXLT</h1>
             <p>ФОРУМ СООБЩЕСТВА</p>
+            <div class="auth-buttons" id="authButtons">
+                <button class="btn btn-outline" onclick="openModal('login')">Вход</button>
+                <button class="btn" onclick="openModal('register')">Регистрация</button>
+            </div>
+            <div class="auth-buttons" id="userButtons" style="display: none;">
+                <span style="color: #9b59b6; margin-right: 15px;" id="userName"></span>
+                <button class="btn" onclick="logout()">Выйти</button>
+            </div>
         </div>
 
         <!-- ПРИВЕТСТВИЕ -->
@@ -553,46 +485,42 @@
 
         <!-- РАЗДЕЛЫ -->
         <div id="sectionsContainer" class="sections-grid">
-            <div class="section-card" onclick="loadSection('projects')">
+            <div class="section-card" onclick="loadCategoryTopics(1)">
                 <h3>📁 Проекты</h3>
                 <p>Игры студии: Ryam World, Quest Messenger, 3D Хоррор</p>
             </div>
-            <div class="section-card" onclick="loadSection('news')">
+            <div class="section-card" onclick="loadCategoryTopics(2)">
                 <h3>📢 Новости</h3>
                 <p>Последние новости и анонсы</p>
             </div>
-            <div class="section-card" onclick="loadSection('faq')">
+            <div class="section-card" onclick="loadCategoryTopics(3)">
                 <h3>❓ FAQ</h3>
                 <p>Часто задаваемые вопросы</p>
             </div>
-            <div class="section-card" onclick="loadSection('workshop')">
+            <div class="section-card" onclick="loadCategoryTopics(4)">
                 <h3>🔧 Мастерская</h3>
                 <p>Технические обсуждения и разработка</p>
             </div>
-            <div class="section-card" onclick="loadSection('security')">
+            <div class="section-card" onclick="loadCategoryTopics(5)">
                 <h3>🔒 Безопасность</h3>
                 <p>Как защитить себя и свои аккаунты</p>
             </div>
-            <div class="section-card" onclick="loadSection('social')">
+            <div class="section-card" onclick="loadCategoryTopics(6)">
                 <h3>🌐 Соцсети</h3>
                 <p>Мы в Telegram, VK и других сетях</p>
             </div>
-            <div class="section-card" onclick="loadSection('support')">
+            <div class="section-card" onclick="loadCategoryTopics(7)">
                 <h3>🛠️ Поддержка</h3>
                 <p>Помощь и контакты</p>
             </div>
-            <div class="section-card" onclick="loadSection('appeals')">
+            <div class="section-card" onclick="loadCategoryTopics(8)">
                 <h3>📬 Обращения</h3>
                 <p>Жалобы и предложения</p>
-            </div>
-            <div class="section-card" onclick="loadSection('members')">
-                <h3>👥 Участники</h3>
-                <p>Все члены сообщества</p>
             </div>
         </div>
 
         <!-- КОНТЕНТ РАЗДЕЛА -->
-        <div id="contentArea" class="content-area" style="display: none;"></div>
+        <div id="contentArea" style="display: none;"></div>
     </div>
 
     <!-- ПОПАП ДЛЯ ПОЛЬЗОВАТЕЛЕЙ -->
@@ -606,69 +534,258 @@
         </div>
     </div>
 
+    <!-- МОДАЛКИ АВТОРИЗАЦИИ -->
+    <div id="authModal" class="modal">
+        <div class="modal-card">
+            <h3 id="modalTitle">Вход</h3>
+            <input type="email" id="authEmail" placeholder="Email">
+            <input type="password" id="authPassword" placeholder="Пароль">
+            <input type="text" id="authName" placeholder="Никнейм" style="display: none;">
+            <button id="authActionBtn" onclick="handleAuth()">Войти</button>
+            <button class="switch-btn" id="authToggleBtn" onclick="toggleAuthMode()">Нет аккаунта? Зарегистрироваться</button>
+        </div>
+    </div>
+
     <footer class="footer">
         Luna Axlt · 2026
     </footer>
 
     <script>
-        // ===== НАСТРОЙКА РЕЖИМА РАБОТЫ =====
-        const mode = 2; // ⬅️ МЕНЯЙ ЗДЕСЬ
+        // ⚙️ КОНФИГУРАЦИЯ
+        const API_URL = 'https://script.google.com/macros/s/AKfycbz-AoW9NHfXf0C502ZlcxHqnOJZcJGtpAfD8woHzupkAFxUzVnY9S998kHF7EHLLUdt/exec';
+        let currentUser = null;
+        let isLoginMode = true;
 
-        const overlay = document.getElementById('fullscreenOverlay');
-        const card = document.getElementById('fullscreenCard');
-        const mainContent = document.getElementById('mainContent');
+        // ===== АВТОРИЗАЦИЯ =====
+        function openModal(mode) {
+            isLoginMode = mode === 'login';
+            document.getElementById('modalTitle').innerText = isLoginMode ? 'Вход' : 'Регистрация';
+            document.getElementById('authActionBtn').innerText = isLoginMode ? 'Войти' : 'Зарегистрироваться';
+            document.getElementById('authToggleBtn').innerText = isLoginMode ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти';
+            document.getElementById('authName').style.display = isLoginMode ? 'none' : 'block';
+            document.getElementById('authModal').style.display = 'flex';
+        }
 
-        if (mode === 1 || mode === 2) {
-            overlay.style.display = 'flex';
-            mainContent.style.opacity = '0.3';
-            mainContent.style.pointerEvents = 'none';
-            
-            let title = '';
-            let message = '';
-            let telegramLink = 'https://t.me/LunaAxltStudiosGames';
-            
-            if (mode === 1) {
-                title = '🔧 Технический перерыв';
-                message = 'Ведутся технические работы. Скоро всё заработает!';
-            } else if (mode === 2) {
-                title = '⛔ Форум отключён';
-                message = 'Форум временно отключён администрацией.';
+        function toggleAuthMode() {
+            isLoginMode = !isLoginMode;
+            document.getElementById('modalTitle').innerText = isLoginMode ? 'Вход' : 'Регистрация';
+            document.getElementById('authActionBtn').innerText = isLoginMode ? 'Войти' : 'Зарегистрироваться';
+            document.getElementById('authToggleBtn').innerText = isLoginMode ? 'Нет аккаунта? Зарегистрироваться' : 'Уже есть аккаунт? Войти';
+            document.getElementById('authName').style.display = isLoginMode ? 'none' : 'block';
+        }
+
+        async function handleAuth() {
+            const email = document.getElementById('authEmail').value;
+            const password = document.getElementById('authPassword').value;
+            const name = document.getElementById('authName').value;
+
+            if (isLoginMode) {
+                // Вход
+                const users = await apiCall('getUsers');
+                const user = users.find(u => u.email === email);
+                if (user) {
+                    currentUser = user;
+                    updateAuthUI();
+                    closeModal();
+                    showNotification('Добро пожаловать, ' + user.name);
+                } else {
+                    alert('Неверный email или пароль');
+                }
+            } else {
+                // Регистрация
+                if (!name || !email || !password) {
+                    alert('Заполните все поля');
+                    return;
+                }
+                const users = await apiCall('getUsers');
+                if (users.some(u => u.email === email)) {
+                    alert('Email уже зарегистрирован');
+                    return;
+                }
+                if (name === 'Linar' && users.some(u => u.name === 'Linar')) {
+                    alert('Ник Linar занят');
+                    return;
+                }
+                const role = (name === 'Linar') ? 'admin' : 'user';
+                const newUser = await apiCall('addUser', { email, name, password, role });
+                if (newUser) {
+                    currentUser = newUser;
+                    updateAuthUI();
+                    closeModal();
+                    showNotification('Регистрация успешна!');
+                }
             }
-            
-            card.innerHTML = `
-                <h2>${title}</h2>
-                <p>${message}</p>
-                <p style="font-size: 1.1rem; color: #888;">Вся информация в нашем Telegram канале:</p>
-                <a href="${telegramLink}" class="social-link" target="_blank">📱 Перейти в Telegram</a>
+        }
+
+        function updateAuthUI() {
+            if (currentUser) {
+                document.getElementById('authButtons').style.display = 'none';
+                document.getElementById('userButtons').style.display = 'flex';
+                document.getElementById('userName').innerText = currentUser.name;
+            } else {
+                document.getElementById('authButtons').style.display = 'flex';
+                document.getElementById('userButtons').style.display = 'none';
+            }
+        }
+
+        async function logout() {
+            currentUser = null;
+            updateAuthUI();
+            showNotification('Вы вышли');
+        }
+
+        // ===== РАБОТА С API =====
+        async function apiCall(action, data = {}) {
+            try {
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action, ...data })
+                });
+                return await response.json();
+            } catch (e) {
+                console.error('API Error:', e);
+                return null;
+            }
+        }
+
+        // ===== ЗАГРУЗКА ТЕМ =====
+        async function loadCategoryTopics(categoryId) {
+            const container = document.getElementById('sectionsContainer');
+            const content = document.getElementById('contentArea');
+            container.style.display = 'none';
+            content.style.display = 'block';
+
+            const topics = await apiCall('getTopics', { categoryId });
+            let html = `<button class="btn" style="margin-bottom:20px;" onclick="backToSections()">← Назад</button>`;
+            html += `<h2 style="color:#9b59b6; margin-bottom:20px;">Темы раздела</h2>`;
+            html += `<div class="topics-list">`;
+
+            if (currentUser) {
+                html += `<button class="btn" style="margin-bottom:20px;" onclick="showNewTopicForm(${categoryId})">➕ Новая тема</button>`;
+            }
+
+            if (topics && topics.length > 0) {
+                topics.forEach(topic => {
+                    html += `
+                        <div class="topic-preview" onclick="loadTopic(${topic.id})">
+                            <div class="topic-preview-header">
+                                <span class="topic-preview-title">${topic.title}</span>
+                            </div>
+                            <div class="topic-preview-meta">${topic.author_name} · ${new Date(topic.created_at).toLocaleDateString()}</div>
+                        </div>
+                    `;
+                });
+            } else {
+                html += `<p style="color:#888; text-align:center;">Пока нет тем</p>`;
+            }
+            html += `</div>`;
+            content.innerHTML = html;
+        }
+
+        // ===== ПРОСМОТР ТЕМЫ =====
+        async function loadTopic(topicId) {
+            const content = document.getElementById('contentArea');
+            const topic = await apiCall('getTopic', { topicId });
+            const posts = await apiCall('getPosts', { topicId });
+
+            let html = `<button class="btn" style="margin-bottom:20px;" onclick="loadCategoryTopics(${topic.category_id})">← Назад</button>`;
+            html += `<div class="topic-card">`;
+            html += `<div class="author"><div class="avatar">${topic.author_name.charAt(0)}</div><div><div class="name">${topic.author_name}</div><div class="post-meta">${new Date(topic.created_at).toLocaleString()}</div></div></div>`;
+            html += `<div class="post-content">${topic.content}</div>`;
+            html += `</div>`;
+
+            if (posts) {
+                posts.forEach(post => {
+                    html += `<div class="topic-card" style="margin-left: 30px;">`;
+                    html += `<div class="author"><div class="avatar" style="width:35px;height:35px;">${post.author_name.charAt(0)}</div><div><div class="name" style="font-size:1rem;">${post.author_name}</div><div class="post-meta">${new Date(post.created_at).toLocaleString()}</div></div></div>`;
+                    html += `<div class="post-content">${post.content}</div>`;
+                    html += `</div>`;
+                });
+            }
+
+            if (currentUser) {
+                html += `
+                    <div class="reply-form">
+                        <textarea id="replyContent" rows="3" placeholder="Ваш ответ..."></textarea>
+                        <button onclick="addReply(${topicId})">Ответить</button>
+                    </div>
+                `;
+            }
+
+            content.innerHTML = html;
+        }
+
+        // ===== ОТВЕТ =====
+        async function addReply(topicId) {
+            const content = document.getElementById('replyContent').value;
+            if (!content) return;
+            await apiCall('addPost', { topicId, authorId: currentUser.id, content });
+            showNotification('Ответ отправлен');
+            loadTopic(topicId);
+        }
+
+        // ===== НОВАЯ ТЕМА =====
+        function showNewTopicForm(categoryId) {
+            const content = document.getElementById('contentArea');
+            content.innerHTML += `
+                <div style="background:#1e1e1e; border-radius:20px; padding:20px; margin-top:20px;">
+                    <h3 style="color:#9b59b6;">Новая тема</h3>
+                    <input type="text" id="newTopicTitle" placeholder="Заголовок" style="width:100%; background:#252525; border:2px solid #2a2a2a; border-radius:40px; padding:15px; margin:15px 0; color:white;">
+                    <textarea id="newTopicContent" rows="5" placeholder="Текст..." style="width:100%; background:#252525; border:2px solid #2a2a2a; border-radius:20px; padding:15px; margin-bottom:15px; color:white;"></textarea>
+                    <button class="btn" onclick="createTopic(${categoryId})">Создать тему</button>
+                </div>
             `;
         }
 
-        // ===== ДАННЫЕ ПОЛЬЗОВАТЕЛЕЙ =====
+        async function createTopic(categoryId) {
+            const title = document.getElementById('newTopicTitle').value;
+            const content = document.getElementById('newTopicContent').value;
+            if (!title || !content) return;
+            await apiCall('addTopic', { title, content, authorId: currentUser.id, categoryId });
+            showNotification('Тема создана');
+            loadCategoryTopics(categoryId);
+        }
+
+        // ===== НАЗАД =====
+        function backToSections() {
+            document.getElementById('sectionsContainer').style.display = 'flex';
+            document.getElementById('contentArea').style.display = 'none';
+        }
+
+        // ===== УВЕДОМЛЕНИЯ =====
+        function showNotification(msg) {
+            alert(msg); // можно заменить на красивый попап
+        }
+
+        // ===== ЗАКРЫТИЕ МОДАЛОК =====
+        function closeModal() {
+            document.getElementById('authModal').style.display = 'none';
+        }
+
+        // ===== ПОПАП ПОЛЬЗОВАТЕЛЯ =====
         const usersData = {
-            'Axtl': { roles: ['Владелец'], roleClass: 'role-admin', roleIcon: '👑', contact: '@LunaAxlt' },
-            'Linar': { roles: ['Команда разработки', 'Официальный аккаунт', 'Служба безопасности'], contact: '—' },
-            'LunaAxlt': { roles: ['Служба безопасности', 'Официальный аккаунт'], roleClass: 'role-security', roleIcon: '🔫', contact: '@LunaAxlt' },
-            'Orange': { roles: ['Команда Проекта'], roleClass: 'role-moderator', roleIcon: '🛠️', contact: '—' },
-            'Kirill_Mod': { roles: ['Модератор', 'Редактор'], roleClass: 'role-moderator', roleIcon: '🛡️', contact: '—' },
-            'Maks_Virn': { roles: ['Участник'], roleClass: 'role-default', roleIcon: '👤', contact: '—' },
-            'Ulas_Ya': { roles: ['Участник'], roleClass: 'role-default', roleIcon: '👤', contact: '—' },
-            'Time_Mit': { roles: ['Участник'], roleClass: 'role-default', roleIcon: '👤', contact: '—' },
-            'Alyona Kind': { roles: ['Пользователь'], roleClass: 'role-default', roleIcon: '👤', contact: '—' }
+            'Linar': { roles: ['Команда разработки', 'Служба безопасности'], contact: '—' },
+            'Axtl': { roles: ['Владелец'], contact: '@LunaAxlt' },
+            'Dark Forge': { roles: ['Служба безопасности', 'Официальный аккаунт'], contact: '@LunaAxlt' },
+            'Orange': { roles: ['Команда Проекта'], contact: '—' },
+            'Kirill_Mod': { roles: ['Модератор', 'Редактор'], contact: '—' },
+            'Maks_Virn': { roles: ['Участник'], contact: '—' },
+            'Ulas_Ya': { roles: ['Участник'], contact: '—' },
+            'Time_Mit': { roles: ['Участник'], contact: '—' },
+            'Alyona Kind': { roles: ['Пользователь'], contact: '—' }
         };
 
         window.showPopup = function(name) {
             const user = usersData[name];
             if (!user) return;
-
             document.getElementById('popupAvatar').innerText = name.charAt(0);
             document.getElementById('popupName').innerText = name;
-
             let rolesHtml = '';
             user.roles.forEach(role => {
-                rolesHtml += `<div class="popup-role-item"><i class="fas fa-shield-alt"></i> ${role}</div>`;
+                rolesHtml += `<div class="popup-role-item">${role}</div>`;
             });
             document.getElementById('popupRoles').innerHTML = rolesHtml;
-
             document.getElementById('popupContact').innerText = user.contact ? `Связь: ${user.contact}` : 'Связь: —';
             document.getElementById('popupOverlay').style.display = 'flex';
         };
@@ -677,676 +794,17 @@
             document.getElementById('popupOverlay').style.display = 'none';
         };
 
-        // ===== ФУНКЦИИ ЗАГРУЗКИ РАЗДЕЛОВ =====
-        function loadSection(section) {
-            const sectionsDiv = document.getElementById('sectionsContainer');
-            const contentDiv = document.getElementById('contentArea');
-            sectionsDiv.style.display = 'none';
-            contentDiv.style.display = 'block';
+        // Добавляем слушатели на участников
+        document.querySelectorAll('.member-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                const name = item.querySelector('.member-name').innerText.split(' ')[0];
+                showPopup(name);
+            });
+        });
 
-            let html = `<div class="back-button" onclick="backToSections()">← Ко всем разделам</div>`;
-
-            if (section === 'projects') {
-                html += `
-                    <div class="topic-card">
-                        <div class="author">
-                            <div class="avatar">L</div>
-                            <div>
-                                <div class="name-line">
-                                    <span class="name">Linar</span>
-                                    <span class="verified">✓</span>
-                                    <span class="role-tag role-dev"><i class="fas fa-code"></i> Команда разработки</span>
-                                </div>
-                                <div class="post-meta">Тема: Проекты студии</div>
-                            </div>
-                        </div>
-                        <div class="project-list">
-                            <div class="project-item">
-                                <span class="status dev">⚡ В РАЗРАБОТКЕ</span>
-                                <span class="project-name">Ryam World</span>
-                            </div>
-                            <div class="project-item">
-                                <span class="status dev">⚡ В РАЗРАБОТКЕ</span>
-                                <span class="project-name">Quest Messenger</span>
-                            </div>
-                            <div class="project-item">
-                                <span class="status frozen">❄️ ЗАМОРОЖЕНО</span>
-                                <span class="project-name">3D Хоррор</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            } else if (section === 'news') {
-                html += `
-                    <div class="topic-card">
-                        <div class="author">
-                            <div class="avatar">L</div>
-                            <div>
-                                <div class="name-line">
-                                    <span class="name">Linar</span>
-                                    <span class="verified">✓</span>
-                                    <span class="role-tag role-dev"><i class="fas fa-code"></i> Команда разработки</span>
-                                </div>
-                                <div class="post-meta">Тема: Важное объявление</div>
-                            </div>
-                        </div>
-                        <p>Добро пожаловать на обновлённый форум!</p>
-                    </div>
-                `;
-            } else if (section === 'faq') {
-                html += `
-                    <div class="topic-card">
-                        <div class="author">
-                            <div class="avatar">O</div>
-                            <div>
-                                <div class="name-line">
-                                    <span class="name">Orange</span>
-                                    <span class="verified">✓</span>
-                                    <span class="role-tag role-moderator"><i class="fas fa-tools"></i> Команда Проекта</span>
-                                </div>
-                                <div class="post-meta">Тема: Информация</div>
-                            </div>
-                        </div>
-                        <p>Раздел в разработке</p>
-                    </div>
-                `;
-            } else if (section === 'workshop') {
-                html += `
-                    <div class="topic-card">
-                        <div class="author">
-                            <div class="avatar">L</div>
-                            <div>
-                                <div class="name-line">
-                                    <span class="name">LunaAxlt</span>
-                                    <span class="verified">✓</span>
-                                    <span class="role-tag role-security"><i class="fas fa-shield-alt"></i> Служба безопасности</span>
-                                </div>
-                                <div class="post-meta">Тема: Мастерская</div>
-                            </div>
-                        </div>
-                        <p>Технические обсуждения и разработка</p>
-                    </div>
-                `;
-            } else if (section === 'security') {
-                // Показываем список тем с яркими префиксами
-                html += `
-                    <h2 style="color:#9b59b6; margin-bottom:20px; font-size:1.8rem;">🔒 Безопасность</h2>
-                    <div class="topics-list">
-                        <div class="topic-preview" onclick="loadSecurityTopic('scam')">
-                            <div class="topic-preview-header">
-                                <span class="topic-prefix">❗ Важно</span>
-                                <span class="topic-preview-title">Как не попасть в руки мошенникам</span>
-                            </div>
-                            <div class="topic-preview-meta">Автор: Linar · 3 роли</div>
-                        </div>
-                        <div class="topic-preview" onclick="loadSecurityTopic('social')">
-                            <div class="topic-preview-header">
-                                <span class="topic-prefix">❗ Важно</span>
-                                <span class="topic-preview-title">Как защитить свои Соцсети</span>
-                            </div>
-                            <div class="topic-preview-meta">Автор: Linar · 3 роли</div>
-                        </div>
-                    </div>
-                `;
-            } else if (section === 'social') {
-                html += `
-                    <div class="social-grid">
-                        <div class="social-card">
-                            <span class="social-icon">📱</span>
-                            <div class="social-name">Telegram</div>
-                            <div class="social-desc">@LunaAxltStudiosGames</div>
-                        </div>
-                        <div class="social-card">
-                            <span class="social-icon">📘</span>
-                            <div class="social-name">ВКонтакте</div>
-                            <div class="social-desc">Потом будет</div>
-                        </div>
-                    </div>
-                `;
-            } else if (section === 'support') {
-                html += `
-                    <div class="topic-card">
-                        <div class="author">
-                            <div class="avatar">A</div>
-                            <div>
-                                <div class="name-line">
-                                    <span class="name">Axtl</span>
-                                    <span class="verified">✓</span>
-                                    <span class="role-tag role-admin"><i class="fas fa-crown"></i> Владелец</span>
-                                </div>
-                                <div class="post-meta">Тема: Контакты</div>
-                            </div>
-                        </div>
-                        <div style="margin-top:15px;">
-                            <p><strong>Официальный аккаунт:</strong> @LunaAxlt</p>
-                            <p><strong>Менеджер:</strong> @LunaAxltofficial</p>
-                            <p><strong>Техподдержка:</strong> @LunaAxltsupportbot</p>
-                        </div>
-                    </div>
-                `;
-            } else if (section === 'appeals') {
-                html += `
-                    <div class="appeal-block">
-                        <h2>500</h2>
-                        <p>Обратитесь в службу поддержки или к менеджеру</p>
-                        <div class="appeal-contacts">
-                            <p>Менеджер: @LunaAxltofficial</p>
-                            <p>Техподдержка: @LunaAxltsupportbot</p>
-                        </div>
-                    </div>
-                `;
-            } else if (section === 'members') {
-                html += `
-                    <h2 style="color:#9b59b6; margin-bottom:20px; font-size:1.8rem;">👥 Все участники</h2>
-                    <div class="members-list">
-                        <div class="member-item" onclick="showPopup('Axtl')">
-                            <div class="member-avatar">A</div>
-                            <div class="member-info">
-                                <div class="member-name">Axtl <span class="verified">✓</span></div>
-                                <div class="member-role">
-                                    <span class="role-tag role-admin"><i class="fas fa-crown"></i> Владелец</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="member-item" onclick="showPopup('Linar')">
-                            <div class="member-avatar">L</div>
-                            <div class="member-info">
-                                <div class="member-name">Linar <span class="verified">✓</span></div>
-                                <div class="member-role">
-                                    <span class="role-tag role-dev"><i class="fas fa-code"></i> Разработка</span>
-                                    <span class="role-tag role-security"><i class="fas fa-shield-alt"></i> СБ</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="member-item" onclick="showPopup('LunaAxlt')">
-                            <div class="member-avatar">L</div>
-                            <div class="member-info">
-                                <div class="member-name">LunaAxlt <span class="verified">✓</span></div>
-                                <div class="member-role">
-                                    <span class="role-tag role-security"><i class="fas fa-shield-alt"></i> СБ</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="member-item" onclick="showPopup('Orange')">
-                            <div class="member-avatar">O</div>
-                            <div class="member-info">
-                                <div class="member-name">Orange <span class="verified">✓</span></div>
-                                <div class="member-role">
-                                    <span class="role-tag role-moderator"><i class="fas fa-tools"></i> Проект</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="member-item" onclick="showPopup('Kirill_Mod')">
-                            <div class="member-avatar">K</div>
-                            <div class="member-info">
-                                <div class="member-name">Kirill_Mod</div>
-                                <div class="member-role">
-                                    <span class="role-tag role-moderator"><i class="fas fa-gavel"></i> Модератор</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="member-item" onclick="showPopup('Maks_Virn')">
-                            <div class="member-avatar">M</div>
-                            <div class="member-info">
-                                <div class="member-name">Maks_Virn</div>
-                                <div class="member-role">
-                                    <span class="role-tag role-default"><i class="fas fa-user"></i> Участник</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="member-item" onclick="showPopup('Ulas_Ya')">
-                            <div class="member-avatar">U</div>
-                            <div class="member-info">
-                                <div class="member-name">Ulas_Ya</div>
-                                <div class="member-role">
-                                    <span class="role-tag role-default"><i class="fas fa-user"></i> Участник</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="member-item" onclick="showPopup('Time_Mit')">
-                            <div class="member-avatar">T</div>
-                            <div class="member-info">
-                                <div class="member-name">Time_Mit</div>
-                                <div class="member-role">
-                                    <span class="role-tag role-default"><i class="fas fa-user"></i> Участник</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="member-item" onclick="showPopup('Alyona Kind')">
-                            <div class="member-avatar">A</div>
-                            <div class="member-info">
-                                <div class="member-name">Alyona Kind</div>
-                                <div class="member-role">
-                                    <span class="role-tag role-default"><i class="fas fa-user"></i> Пользователь</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            }
-
-            contentDiv.innerHTML = html;
-        }
-
-        // Функция для загрузки конкретной темы безопасности
-        window.loadSecurityTopic = function(topic) {
-            const sectionsDiv = document.getElementById('sectionsContainer');
-            const contentDiv = document.getElementById('contentArea');
-            sectionsDiv.style.display = 'none';
-            contentDiv.style.display = 'block';
-
-            let html = `<div class="back-button" onclick="loadSection('security')">← К списку тем</div>`;
-
-            if (topic === 'scam') {
-                html += `
-                    <div class="topic-card">
-                        <div class="author">
-                            <div class="avatar">L</div>
-                            <div>
-                                <div class="name-line">
-                                    <span class="name">Linar</span>
-                                    <span class="verified">✓</span>
-                                    <span class="role-tag role-dev"><i class="fas fa-code"></i> Команда разработки</span>
-                                    <span class="role-tag role-security"><i class="fas fa-shield-alt"></i> Служба безопасности</span>
-                                </div>
-                                <div class="post-meta">Тема: Как не попасть в руки мошенникам</div>
-                            </div>
-                        </div>
-                        <div style="color:#ddd; line-height:1.6; margin-top:15px;">
-                            <p>👋 Ребята, всех приветствую! Это будет не обычный пост, а ликбез по безопасности. Тема больная, но важная: как не попасться на крючок мошенников, особенно если вы состоите в тематических чатах игр или студий.</p>
-                            <p>Мошенники следят за популярными проектами. Чем активнее комьюнити, тем больше рыбы они ловят на удочку. Давайте разбираться, как не стать уловом. 🚫🎣</p>
-                            <p>⚠️ <strong>Как обманывают в сфере разработки игр (и около нее)</strong></p>
-                            <p>Если вы общаетесь с представителями студий (или теми, кто выдает себя за них), запомните несколько правил:</p>
-                            <p>1. <strong>Проверяй того, с кем говоришь.</strong> Мошенники часто создают аккаунты-клоны (копируют аватарку, имя, ник) администраторов, известных разработчиков или старых игроков. Прежде чем перевести деньги или отдать доступ к почте проверь никнейм до буквы! Сравни дату регистрации аккаунта.</p>
-                            <p>2. <strong>Фишинговые сайты-двойники.</strong> Убедись, что ты заходишь на официальный сайт студии или проекта. Проверяй ссылку (URL) в адресной строке. Одна лишняя буква в домене и твои логин/пароль уже у злоумышленников.</p>
-                            <p>Будете в безопасности! Не переводите никому деньги! Наши игры бесплатные и доступны всем 🤗</p>
-                            <p><em>Будет дополняться</em></p>
-                        </div>
-                    </div>
-                `;
-            } else if (topic === 'social') {
-                html += `
-                    <div class="topic-card">
-                        <div class="author">
-                            <div class="avatar">L</div>
-                            <div>
-                                <div class="name-line">
-                                    <span class="name">Linar</span>
-                                    <span class="verified">✓</span>
-                                    <span class="role-tag role-dev"><i class="fas fa-code"></i> Команда разработки</span>
-                                    <span class="role-tag role-security"><i class="fas fa-shield-alt"></i> Служба безопасности</span>
-                                </div>
-                                <div class="post-meta">Тема: Как защитить свои Соцсети</div>
-                            </div>
-                        </div>
-                        <div style="color:#ddd; line-height:1.6; margin-top:15px;">
-                            <p>Как защитить свои соцсети (ВК, Telegram, и другие) от взлома</p>
-                            <p>Даже если ты не поведешься на удочку мошенников, твой аккаунт могут попытаться взломать технически или методом «социальной инженерии». Вот твой базовый «скилл сетап» для выживания.</p>
-                            <p>· <strong>Двухфакторка (2FA) — твой щит.</strong> Обязательно включи двухфакторную аутентификацию везде, где это возможно: ВКонтакте, Telegram, Discord, почта. Используй не СМС (их могут перехватить), а специальные приложения типа Google Authenticator. Это как второй замок на двери.</p>
-                            <p>· <strong>Пароли: хватит использовать «qwerty»!</strong> Пароль от игрового форума и пароль от почты должны быть разными. Используй менеджеры паролей, чтобы хранить сложные связки (например, G7$kL9#pR2). Если один сайт взломают, злоумышленники не зайдут на другой.</p>
-                            <p style="color:#f5cb5c;">(ВНИМАНИЕ ❗ ПРИ УСТАНОВКЕ ПАРОЛЕЙ ОБЯЗАТЕЛЬНО ЗАПОЛНИТЕ ИХ ‼️ ЧТО БЫ НЕ ПОТЕРЯТЬ ДОСТУП К АККАУНТАМ)</p>
-                            <p>· <strong>Не ведись на «бесплатный сыр».</strong> Вам пишет «админ» и просит проголосовать за проект, перейдя по ссылке? Или друг скинул файл «прикол.exe»? Стоп. Это фишинг. Всегда проверяйте подозрительные ссылки и не скачивайте файлы от незнакомцев. Даже если пишет друг — позвони ему и уточни, он ли это. (Даже если это он, не спишите переходить ссылке, он может специально вас взломать)</p>
-                            <p>🚩 <strong>Признаки, что тебя уже взломали (или пытаются)</strong></p>
-                            <p>Как понять, что пора бить тревогу?</p>
-                            <p>· Выкидывает из аккаунта. Вас внезапно разлогинило, а пароль перестал подходить.<br>· Спам-атака. Вам на телефон приходят кучи СМС с кодами подтверждения, которых вы не запрашивали. Кто-то пытается подобрать код.<br>· Странная активность. В истории входов (есть в настройках безопасности VK и Google) вы видите входы из других городов или стран.</p>
-                            <p>Если заметили такое не паникуйте, а действуйте:</p>
-                            <p>1. Жмите «Выйти со всех устройств».<br>2. Меняйте пароль (на самый сложный, который есть в менеджере).<br>3. Проверяйте привязанные номера и почты в настройках (не подвязал ли кто свой телефон).</p>
-                            <p>Безопасность - это не паранойя, это ответственность. Потратьте 10 минут на настройку защиты сегодня, чтобы не потерять свои скины, достижения и деньги завтра.</p>
-                            <p>Будете в Безопасности! Пост будет дополняться</p>
-                        </div>
-                    </div>
-                `;
-            }
-
-            contentDiv.innerHTML = html;
-        };
-
-        function backToSections() {
-            document.getElementById('sectionsContainer').style.display = 'flex';
-            document.getElementById('contentArea').style.display = 'none';
-        }
+        // Загружаем пользователя при старте
+        // (в реальном проекте нужно проверять сессию)
+        updateAuthUI();
     </script>
-<!-- ========== ВИДЖЕТ-ПОМОЩНИК ========== -->
-<style>
-    /* Стили для виджета */
-    .helper-widget {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 10000;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    }
-    .helper-icon {
-        width: 60px;
-        height: 60px;
-        background: #9b59b6;
-        border-radius: 50%;
-        box-shadow: 0 4px 15px rgba(155,89,182,0.4);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        transition: transform 0.2s;
-        border: 2px solid white;
-    }
-    .helper-icon:hover {
-        transform: scale(1.1);
-    }
-    .helper-icon span {
-        font-size: 30px;
-        color: white;
-    }
-    .helper-chat {
-        position: absolute;
-        bottom: 80px;
-        right: 0;
-        width: 320px;
-        max-width: 90vw;
-        background: #1e1e1e;
-        border: 2px solid #9b59b6;
-        border-radius: 20px;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-        display: none;
-        flex-direction: column;
-        overflow: hidden;
-        transition: all 0.2s;
-    }
-    .helper-chat.open {
-        display: flex;
-    }
-    .chat-header {
-        background: #9b59b6;
-        color: white;
-        padding: 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        font-weight: bold;
-    }
-    .chat-header span {
-        cursor: pointer;
-        font-size: 20px;
-    }
-    .chat-messages {
-        padding: 15px;
-        max-height: 300px;
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    .message-bot {
-        background: #2a2a2a;
-        color: white;
-        padding: 10px;
-        border-radius: 15px;
-        border-bottom-left-radius: 0;
-        align-self: flex-start;
-        max-width: 80%;
-    }
-    .message-user {
-        background: #9b59b6;
-        color: white;
-        padding: 10px;
-        border-radius: 15px;
-        border-bottom-right-radius: 0;
-        align-self: flex-end;
-        max-width: 80%;
-    }
-    .chat-buttons {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-        padding: 15px;
-        border-top: 1px solid #333;
-    }
-    .chat-btn {
-        background: #2a2a2a;
-        border: 1px solid #9b59b6;
-        color: white;
-        padding: 8px 12px;
-        border-radius: 20px;
-        cursor: pointer;
-        font-size: 0.9rem;
-        transition: 0.2s;
-        flex: 1 1 auto;
-        min-width: 120px;
-    }
-    .chat-btn:hover {
-        background: #9b59b6;
-    }
-</style>
-
-<div class="helper-widget" id="helperWidget">
-    <!-- Иконка -->
-    <div class="helper-icon" id="helperIcon">
-        <span>💬</span>
-    </div>
-    <!-- Чат-окно -->
-    <div class="helper-chat" id="helperChat">
-        <div class="chat-header">
-            <span>🤖 Помощник Luna Axlt</span>
-            <span id="closeChat">✕</span>
-        </div>
-        <div class="chat-messages" id="chatMessages">
-            <div class="message-bot">Привет! Я помощник студии Luna Axlt. Выбери один из вариантов ниже:</div>
-        </div>
-        <div class="chat-buttons" id="chatButtons">
-            <button class="chat-btn" data-question="why">❓ Почему я не могу писать на форум?</button>
-            <button class="chat-btn" data-question="post">✍️ Хочу написать пост</button>
-            <button class="chat-btn" data-question="contact">📞 Связаться с владельцами</button>
-            <button class="chat-btn" data-question="more">🔍 Узнать больше</button>
-            <button class="chat-btn" data-question="tech">⚙️ Технические проблемы</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    (function() {
-        const widget = document.getElementById('helperWidget');
-        const icon = document.getElementById('helperIcon');
-        const chat = document.getElementById('helperChat');
-        const closeBtn = document.getElementById('closeChat');
-        const chatMessages = document.getElementById('chatMessages');
-        const buttons = document.querySelectorAll('.chat-btn');
-
-        // Открыть чат при клике на иконку
-        icon.addEventListener('click', () => {
-            chat.classList.add('open');
-        });
-
-        // Закрыть чат при клике на крестик
-        closeBtn.addEventListener('click', () => {
-            chat.classList.remove('open');
-        });
-
-        // Обработка кликов по кнопкам
-        buttons.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                const question = e.target.innerText; // текст кнопки
-                // Добавляем сообщение пользователя
-                const userMsg = document.createElement('div');
-                userMsg.className = 'message-user';
-                userMsg.textContent = question;
-                chatMessages.appendChild(userMsg);
-
-                // Ответ бота
-                const botMsg = document.createElement('div');
-                botMsg.className = 'message-bot';
-                botMsg.textContent = 'Привет, к сожалению, сейчас я не могу отвечать на вопросы, так как я нахожусь в разработке.';
-                chatMessages.appendChild(botMsg);
-
-                // Прокрутка вниз
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            });
-        });
-
-        // Закрытие чата при клике вне его (опционально)
-        document.addEventListener('click', (e) => {
-            if (!widget.contains(e.target)) {
-                chat.classList.remove('open');
-            }
-        });
-    })();
-</script>
-<!-- ========== КОНЕЦ ВИДЖЕТА ========== -->
-<!-- ===== ЧАТ ЧЕРЕЗ GOOGLE ТАБЛИЦЫ ===== -->
-<style>
-    .google-chat {
-        background: #1e1e1e;
-        border-radius: 24px;
-        padding: 25px;
-        margin-top: 40px;
-        border: 2px solid #9b59b6;
-    }
-    .chat-title {
-        color: #9b59b6;
-        font-size: 1.8rem;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    .chat-messages {
-        background: #1a1a1a;
-        border-radius: 16px;
-        padding: 20px;
-        height: 300px;
-        overflow-y: auto;
-        margin-bottom: 20px;
-        border: 1px solid #2a2a2a;
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
-    .message {
-        background: #252525;
-        padding: 12px 15px;
-        border-radius: 15px;
-        max-width: 90%;
-        border-left: 4px solid #9b59b6;
-    }
-    .message-author {
-        color: #9b59b6;
-        font-weight: 600;
-        font-size: 0.9rem;
-        margin-bottom: 4px;
-    }
-    .message-text {
-        color: white;
-    }
-    .message-time {
-        color: #666;
-        font-size: 0.7rem;
-        text-align: right;
-        margin-top: 4px;
-    }
-    .chat-input-area {
-        display: flex;
-        gap: 15px;
-        align-items: center;
-    }
-    .chat-input {
-        flex: 1;
-        background: #252525;
-        border: 2px solid #2a2a2a;
-        border-radius: 40px;
-        padding: 15px 20px;
-        color: white;
-        font-size: 1rem;
-        outline: none;
-    }
-    .chat-input:focus {
-        border-color: #9b59b6;
-    }
-    .chat-send {
-        background: #9b59b6;
-        border: none;
-        border-radius: 40px;
-        padding: 15px 30px;
-        color: white;
-        font-weight: 600;
-        cursor: pointer;
-        transition: 0.2s;
-    }
-    .chat-send:active {
-        background: #b07cc6;
-        transform: scale(0.97);
-    }
-</style>
-
-<div class="google-chat">
-    <div class="chat-title">
-        <span>💬</span>
-        <span>Чат форума</span>
-    </div>
-    
-    <div class="chat-messages" id="bottomChatMessages"></div>   <!-- ID изменён -->
-    
-    <div class="chat-input-area">
-        <input type="text" class="chat-input" id="chatInput" placeholder="Имя: сообщение">
-        <button class="chat-send" onclick="sendMessage()">→</button>
-    </div>
-</div>
-
-<script>
-    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyHy95fJrtamw6E-lcMLHvrYP7Jemj_hKsPIm1eroL7LokmfOTaVkqzI4saAES25_66/exec';
-
-    async function loadMessages() {
-        try {
-            const response = await fetch(SCRIPT_URL + '?t=' + Date.now());
-            const messages = await response.json();
-            
-            const container = document.getElementById('bottomChatMessages');   // исправлено
-            container.innerHTML = '';
-            
-            messages.forEach(msg => {
-                const div = document.createElement('div');
-                div.className = 'message';
-                div.innerHTML = `
-                    <div class="message-author">${msg.author}</div>
-                    <div class="message-text">${msg.text}</div>
-                    <div class="message-time">${new Date(msg.time).toLocaleTimeString()}</div>
-                `;
-                container.appendChild(div);
-            });
-            
-            container.scrollTop = container.scrollHeight;
-        } catch(e) {
-            console.log('Ошибка загрузки', e);
-        }
-    }
-
-    async function sendMessage() {
-        const input = document.getElementById('chatInput');
-        const text = input.value.trim();
-        if (!text) return;
-        
-        let author = 'Гость';
-        let message = text;
-        if (text.includes(':')) {
-            author = text.split(':')[0].trim();
-            message = text.split(':').slice(1).join(':').trim();
-        }
-        
-        try {
-            await fetch(SCRIPT_URL, {
-                method: 'POST',
-                mode: 'no-cors',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({author, text: message})
-            });
-            
-            input.value = '';
-            setTimeout(loadMessages, 1000);
-        } catch(e) {
-            console.log('Ошибка отправки', e);
-        }
-    }
-
-    loadMessages();
-    setInterval(loadMessages, 3000);
-</script>
-<!-- ===== КОНЕЦ ЧАТА ===== -->
 </body>
     </html>
